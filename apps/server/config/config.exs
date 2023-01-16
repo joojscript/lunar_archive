@@ -17,6 +17,15 @@ config :lunar, LunarWeb.Endpoint,
   pubsub_server: Lunar.PubSub,
   live_view: [signing_salt: "JKgHHbpb"]
 
+# Configures the database
+config :lunar, Lunar.Repo,
+  url: {:system, "DATABASE_URL"},
+  timeout: 60_000,
+  idle_interval: 10_000,
+  queue_target: 5_000
+
+config :mongodb_driver, log: true
+
 # Configures the mailer
 #
 # By default it uses the "Local" adapter which stores the emails

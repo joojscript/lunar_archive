@@ -7,11 +7,13 @@ defmodule Lunar.Application do
 
   @impl true
   def start(_type, _args) do
+    Dotenv.load()
+
     children = [
-      # Start the Ecto repository
-      Lunar.Repo,
       # Start the Telemetry supervisor
       LunarWeb.Telemetry,
+      # Start the database repo:
+      {Mongo, Lunar.Repo.generate_child_schema()},
       # Start the PubSub system
       {Phoenix.PubSub, name: Lunar.PubSub},
       # Start the Endpoint (http/https)

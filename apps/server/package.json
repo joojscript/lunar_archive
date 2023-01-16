@@ -1,0 +1,11 @@
+{
+  "name": "@lunar/server",
+  "scripts": {
+    "dev": "mix phx.server",
+    "test": "mix test",
+    "test:watch": "mix test.watch",
+    "compile": "mix compile",
+    "format": "mix format",
+    "format:watch": "mix format --watch"
+  }
+}
