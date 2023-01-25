@@ -1,0 +1,159 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+:root {
+  --accent: 124, 58, 237;
+  --accent-gradient: linear-gradient(45deg,
+      rgb(var(--accent)),
+      #da62c4 30%,
+      white 60%);
+  --background-color: #26272b;
+}
+
+html {
+  font-family: Poppins, Inter;
+  background-color: #26272b;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+
+/* Top */
+
+.custom-shape-divider-bottom-1665696614 {
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  transform: rotate(180deg);
+}
+
+.custom-shape-divider-bottom-1665696614 svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 127px;
+  transform: rotateY(180deg);
+}
+
+/* Bottom */
+
+.custom-shape-divider-top-1665696661 {
+  overflow: hidden;
+  line-height: 0;
+}
+
+.custom-shape-divider-top-1665696661 svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 127px;
+  transform: rotateY(180deg);
+}
+
+
+.custom-shape-divider-bottom-1665343298 {
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.custom-shape-divider-bottom-1665343298 svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 200px;
+}
+
+.hero-title-gradient {
+  background: -webkit-linear-gradient(white, #b4add1);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+.navbar-link {
+  @apply text-white lg:text-base text-2xl leading-6 mr-4 ml-4 2xl:mr-6 2xl:ml-6 cursor-pointer font-normal lg:font-medium hover:scale-125 transition duration-300 h-full pt-2
+}
+
+/* Typography */
+
+.custom-block-title {
+  @apply text-white text-3xl font-bold tracking-normal;
+}
+
+.custom-block-big-title {
+  @apply text-white text-4xl xl:text-5xl font-bold tracking-normal;
+}
+
+.custom-block-subtitle {
+  @apply text-xs text-customSecondary tracking-wider font-bold uppercase;
+}
+
+.custom-content-title {
+  @apply text-white text-lg font-bold tracking-normal;
+}
+
+.custom-content-text-white {
+  @apply text-white text-base leading-relaxed
+}
+
+.custom-content-text-gray {
+  @apply text-gray-400 text-base
+}
+
+/* Backgrounds */
+
+.custom-bg-dark1 {
+  @apply bg-customDarkBg1 fill-customDarkBg1
+}
+
+.custom-bg-dark2 {
+  @apply bg-customDarkBg2 fill-customDarkBg2
+}
+
+.custom-bg-dark3 {
+  @apply bg-customDarkBg3 fill-customDarkBg3
+}
+
+body,
+html {
+  @apply bg-customDarkBg2
+}
+
+/* Borders */
+
+.custom-border-gray {
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(255, 255, 255, 0.15);
+}
+
+.custom-border-gray-darker {
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(255, 255, 255, 0.07);
+
+}
+
+.custom-border-gray-nobottom {
+  border-style: solid;
+  border-width: 1px 1px 0 1px;
+  border-color: rgb(255, 255, 255, 0.1);
+  border-radius: "10px";
+}
+
+/* Buttons */
+
+.custom-button-colored {
+  @apply rounded-lg font-bold bg-customPrimary text-white flex justify-center items-center hover:bg-[#7765e6] cursor-pointer transition
+}
+
+.bg-card {
+  @apply bg-customDarkBg1
+}
+
+/* Preventing FOUC */
+@font-face {
+  font-display: var(--fontsource-Inter-font-display, optional);
+}
