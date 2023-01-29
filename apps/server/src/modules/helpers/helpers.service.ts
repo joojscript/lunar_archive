@@ -71,4 +71,19 @@ export class HelpersService {
       .map((p) => path.join(p, packageName));
     return lookupPaths.find((p) => fs.existsSync(p));
   }
+
+  async runBinary(binaryName: string, ...args: string[]) {
+    const { exec } = require('child_process');
+    const { promisify } = require('util');
+    const path = require.resolve('@lunar/bin');
+    const binaryPath = join(path, '..', binaryName);
+    const command = `sh -c "${binaryPath} ${args.join(' ')}"`;
+
+    try {
+      const { stdout } = await promisify(exec)(command);
+      return stdout;
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }
