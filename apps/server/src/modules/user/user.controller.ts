@@ -7,22 +7,23 @@ import {
   Patch,
   Post,
   UseFilters,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
-// import { JwtAuthGuard } from '../auth/guards/jwt.guard';
-// import { Public } from '@modules/auth/decorators/public.decorator';
 import { User } from '@prisma/client';
 import { UserExceptionFilter } from './filters/user-exception.filter';
+import { AuthGuard } from '../auth/guards/auth.guard';
+import { Public } from '../auth/decorators/public.decorator';
 
-// @UseGuards(JwtAuthGuard)
+@UseGuards(AuthGuard)
 @UseFilters(UserExceptionFilter)
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  // @Public()
+  @Public()
   @Post()
   create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.userService.create(createUserDto);
