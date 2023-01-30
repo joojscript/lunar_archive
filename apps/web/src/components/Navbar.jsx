@@ -1,11 +1,8 @@
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 
-import { LunarLogo } from "@assets/logos/LunarLogo";
 import { GithubIcon } from "@assets/icons/GithubIcon";
-import { FacebookIcon } from "@assets/icons/FacebookIcon";
-import { InstagramIcon } from "@assets/icons/InstagramIcon";
-import { TwitterIcon } from "@assets/icons/TwitterIcon";
+import { LunarLogo } from "@assets/logos/LunarLogo";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -63,13 +60,11 @@ export const Navbar = () => {
           <div className="grow basis-0 justify-end hidden lg:flex">
             <a
               className="text-white custom-border-gray rounded-xl
-           bg-customDarkBg2 hover:bg-customDarkBg3  border-gray-700 pl-6 pr-8 pt-2 pb-2 text-sm flex"
-              href="https://github.com/matt765/Tidestream"
-              target="_blank"
-              aria-label="source code"
+           bg-customDarkBg2 hover:bg-customDarkBg3  border-gray-700 pl-6 pr-6 pt-2 pb-2 text-sm flex"
+              href="/sign"
+              aria-label="Get onboard"
             >
-              <GithubIcon />
-              Source code
+              Get Onboard
             </a>
           </div>
         </motion.div>
