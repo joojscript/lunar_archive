@@ -6,6 +6,8 @@ export interface Props {
 const { title } = Astro.props;
 
 import "@styles/globals.css";
+import ReactLayout from "./Layout";
+import PrivateRoutes from "./PrivateRoutes";
 ---
 
 <!DOCTYPE html>
@@ -24,6 +26,10 @@ import "@styles/globals.css";
     <title>{title}</title>
   </head>
   <body>
-    <slot />
+    <PrivateRoutes client:only>
+      <ReactLayout client:only>
+        <slot />
+      </ReactLayout>
+    </PrivateRoutes>
   </body>
 </html>

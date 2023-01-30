@@ -1,7 +1,10 @@
+import PowerIcon from "@assets/icons/Power";
+import { AuthStore } from "@stores/auth.store";
+import { DashboardStore } from "@stores/dashboard.store";
 import { useCallback } from "react";
+import { toast } from "react-hot-toast";
 import { Icon } from "./Icon";
 import { IconButton } from "./IconButton";
-import { DashboardStore } from "@stores/dashboard.store";
 
 export const Header: React.FC = () => {
   const onSidebarHide = useCallback(() => {
@@ -11,6 +14,14 @@ export const Header: React.FC = () => {
       showSidebar: !currentValue.showSidebar,
     });
   }, [DashboardStore]);
+
+  const logout = useCallback(() => {
+    const current = AuthStore.get();
+    delete current.accessToken;
+    AuthStore.set(current);
+    window.location.href = "/sign";
+    toast("You have been logged out");
+  }, [AuthStore]);
 
   return (
     <div className="w-full sm:flex p-2 items-end sm:items-center">
@@ -37,7 +48,7 @@ export const Header: React.FC = () => {
           onClick={onSidebarHide}
         />
       </div>
-      <div className="w-full sm:w-56 mt-4 sm:mt-0 flex ml-3">
+      <div className="w-full sm:w-56 mt-4 sm:mt-0 flex justify-center items-center ml-3">
         <Icon
           path="res-react-dash-search"
           className="w-5 h-5 search-icon left-3 absolute"
@@ -51,6 +62,12 @@ export const Header: React.FC = () => {
             placeholder="search"
           />
         </form>
+        <div
+          className="w-12 h-6 ml-3 px-2 py-5 rounded-lg cursor-pointer flex justify-center items-center hover:bg-gray-500 hover:bg-opacity-5"
+          onClick={logout}
+        >
+          <PowerIcon className="fill-gray-500 h-5 w-5" />
+        </div>
       </div>
     </div>
   );

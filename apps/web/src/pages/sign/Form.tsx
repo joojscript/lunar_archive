@@ -2,10 +2,11 @@ import { ArrowIcon } from "@assets/icons/Arrow";
 import { LunarLogo } from "@assets/logos/LunarLogo";
 import LoadingSpinner from "@components/LoadingSpinner";
 import SpinningCircle from "@components/SpinningCircle";
+import { AuthStore } from "@stores/auth.store";
 import { motion } from "framer-motion";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import OtpInput from "react-otp-input";
 import { makeRequest } from "src/services/http";
 
@@ -18,7 +19,7 @@ type SignForm = {
 };
 
 const SignForm: React.FC = () => {
-  const [page, setPage] = React.useState<Page>("OTP");
+  const [page, setPage] = React.useState<Page>("FORM");
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const {
     register,
@@ -34,11 +35,10 @@ const SignForm: React.FC = () => {
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    toast.success("test");
     let result;
     try {
       setIsLoading(true);
-      switch (data.page) {
+      switch (page) {
         case "FORM":
           result = await makeRequest("/auth/login", {
             body: JSON.stringify({
@@ -47,30 +47,43 @@ const SignForm: React.FC = () => {
             method: "POST",
           });
 
-          if (result.status === 200) {
-            toast;
+          if (result.status == 201) {
+            toast.success("An OTP code was sent to your email");
+            setPage("OTP");
+            return;
+          } else {
+            toast.error("Invalid email");
           }
 
-          setPage("OTP");
           break;
         case "OTP":
-          result = await makeRequest("/auth/authorize", {
+          result = await makeRequest("/auth/login/authorize", {
             body: JSON.stringify({
               email: data.email,
               code: data.code,
             }),
             method: "POST",
           });
+
+          if (result.status == 201) {
+            const data = await result.json();
+            AuthStore.set({ ...AuthStore.get(), ...data });
+            toast.success("You are now logged in");
+            window.location.href = "/dashboard";
+            return;
+          } else {
+            toast.error("Invalid OTP code");
+          }
+
           console.log(result);
           break;
       }
-    } catch (error) {
+    } catch (error: any) {
+      toast.error(error.message);
     } finally {
       setIsLoading(false);
     }
   });
-
-  console.log(getValues());
 
   const getContent = (page: Page) => {
     switch (page) {
@@ -154,93 +167,71 @@ const SignForm: React.FC = () => {
       default:
       case "FORM":
         return (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="lg:flex lg:flex-wrap justify-items-stretch items-center g-0 flex-1 lg:w-8/12 xl:6/12"
-            >
-              <div className="px-4 md:px-0 w-full">
-                {isLoading ? (
-                  <LoadingSpinner show />
-                ) : (
-                  <div className="md:p-12 md:mx-6">
-                    <div className="text-center flex justify-center items-center flex-col">
-                      <LunarLogo class="mx-auto" width="8rem" height="auto" />
-                      <h4 className="text-xl font-semibold mt-1 mb-12 pb-1">
-                        Welcome aboard!
-                      </h4>
-                    </div>
-                    <form>
-                      <p className="mb-4">Please login to your account</p>
-                      <div className="mb-4">
-                        {errors["email"] && (
-                          <motion.div
-                            initial={{ opacity: 0 }}
-                            whileInView={{ opacity: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: 0.2 }}
-                          >
-                            <p className="text-red-500 text-sm font-medium my-4">
-                              {errors["email"]?.message}
-                            </p>
-                          </motion.div>
-                        )}
-                        <input
-                          type="email"
-                          className={`form-control text-white block w-full px-3 py-1.5 text-base font-normal bg-transparent bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:bg-transparent focus:border-blue-600 focus:outline-none ${
-                            errors["email"] &&
-                            "border-red-600 focus:border-red-600"
-                          }`}
-                          placeholder="Your Email"
-                          {...register("email", {
-                            required: "Email is required",
-                          })}
-                        />
-                      </div>
-                    </form>
-                    <div className="text-center pt-1 mb-12 pb-1">
-                      <button
-                        className="inline-block px-6 py-2.5 text-white font-medium text-xs leading-tight uppercase rounded shadow-md bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:bg-blue-700 hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out w-full mb-3"
-                        type="submit"
-                        onClick={onSubmit}
-                      >
-                        Log in
-                      </button>
-                    </div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="lg:flex lg:flex-wrap justify-items-stretch items-center g-0 flex-1 lg:w-8/12 xl:6/12"
+          >
+            <div className="px-4 md:px-0 w-full">
+              {isLoading ? (
+                <LoadingSpinner show />
+              ) : (
+                <div className="md:p-12 md:mx-6">
+                  <div className="text-center flex justify-center items-center flex-col">
+                    <LunarLogo class="mx-auto" width="8rem" height="auto" />
+                    <h4 className="text-xl font-semibold mt-1 mb-12 pb-1">
+                      Welcome aboard!
+                    </h4>
                   </div>
-                )}
-              </div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="lg:w-4/12 xl:w-6/12 h-96 flex items-center lg:rounded-r-lg rounded-b-lg lg:rounded-bl-none bg-gradient-to-r from-violet-500 to-fuchsia-500"
-            >
-              <div className="text-white px-4 py-6 md:p-12 md:mx-6">
-                <h4 className="text-xl font-semibold mb-6">
-                  We are more than just a company
-                </h4>
-                <p className="text-sm">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat.
-                </p>
-              </div>
-            </motion.div>
-          </>
+                  <form>
+                    <p className="mb-4">Please login to your account</p>
+                    <div className="mb-4">
+                      {errors["email"] && (
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          whileInView={{ opacity: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.5, delay: 0.2 }}
+                        >
+                          <p className="text-red-500 text-sm font-medium my-4">
+                            {errors["email"]?.message}
+                          </p>
+                        </motion.div>
+                      )}
+                      <input
+                        type="email"
+                        className={`form-control text-white block w-full px-3 py-1.5 text-base font-normal bg-transparent bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:bg-transparent focus:border-blue-600 focus:outline-none ${
+                          errors["email"] &&
+                          "border-red-600 focus:border-red-600"
+                        }`}
+                        placeholder="Your Email"
+                        {...register("email", {
+                          required: "Email is required",
+                        })}
+                      />
+                    </div>
+                  </form>
+                  <div className="text-center pt-1 mb-12 pb-1">
+                    <button
+                      className="inline-block px-6 py-2.5 text-white font-medium text-xs leading-tight uppercase rounded shadow-md bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:bg-blue-700 hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out w-full mb-3"
+                      type="submit"
+                      onClick={onSubmit}
+                    >
+                      Log in
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </motion.div>
         );
     }
   };
 
   return (
     <div className="container py-12 h-full">
-      <Toaster />
       <div className="flex justify-center items-center h-full w-screen g-6 text-white">
         <div className="flex justify-center items-center xl:w-10/12 lg:w-8/12 md:w-6/12 sm:w-6-12 h-full">
           <div className="absolute">
