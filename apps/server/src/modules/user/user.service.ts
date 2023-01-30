@@ -1,29 +1,12 @@
 import { PrismaService } from '@modules/prisma/prisma.service';
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
-import { hash } from 'bcryptjs';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
-export class UserService implements OnModuleInit {
+export class UserService {
   constructor(private readonly prismaService: PrismaService) {}
-
-  async onModuleInit() {
-    await this.prismaService.$connect();
-    this.prismaService.$use(async (params: any, next) => {
-      if (
-        (params.action == 'create' || params.action == 'update') &&
-        params.model == 'User'
-      ) {
-        const user = params.args.data;
-        const identity = await hash(user.identity, 10);
-        user.identity = identity;
-        params.args.data = user;
-      }
-      return await next(params);
-    });
-  }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const userExists = await this.prismaService.user.findFirst({

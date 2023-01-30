@@ -17,25 +17,25 @@ export class AuthService {
   ) {}
 
   async logInAttempt(loginDto: LoginDto) {
-    const userExists = await this.userService.findOneBy(loginDto);
+    let user = await this.userService.findOneBy(loginDto);
 
-    if (userExists) {
-      // 4 Digit code to verify user's identity:
-      const code = Math.floor(1000 + Math.random() * 9000).toString();
-
-      // Store the code in a store:
-      this.authCodesService.set(code, loginDto.email);
-
-      return await this.helperService.sendEmail('login', {
-        to: loginDto.email,
-        subject: "You've logged in!",
-        templateVars: {
-          code,
-        },
-      });
+    if (!user) {
+      user = await this.userService.create(loginDto);
     }
 
-    throw new Error('User not found');
+    // 4 Digit code to verify user's identity:
+    const code = Math.floor(1000 + Math.random() * 9000).toString();
+
+    // Store the code in a store:
+    this.authCodesService.set(code, user.email);
+
+    return await this.helperService.sendEmail('login', {
+      to: user.email,
+      subject: "You've logged in!",
+      templateVars: {
+        code,
+      },
+    });
   }
 
   async logInAuthorize(loginAuthorizeDto: LoginAuthorizeDto) {

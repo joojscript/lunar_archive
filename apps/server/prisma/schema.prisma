@@ -9,9 +9,22 @@ datasource db {
 
 model User {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  firstName String   @map("first_name")
-  lastName  String   @map("last_name")
   email     String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  Host      Host[]
+
+  @@map("users")
+}
+
+model Host {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  endpoints   String[]
+  ownerId     String    @map("owner_id") @db.ObjectId
+  owner       User      @relation(fields: [ownerId], references: [id])
+  confirmedAt DateTime? @map("confirmed_at")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("hosts")
 }
