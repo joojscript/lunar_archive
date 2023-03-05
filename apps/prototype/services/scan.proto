@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package services.scan;
+
+option go_package = "lunar/prototype/services";
+
+enum ScanStatus {
+  UNKNOWN = 0;
+  OPEN = 1;
+  CLOSED = 2;
+}
+
+enum OnScanResultAction {
+  SAVE = 0;
+  IGNORE = 1;
+}
+
+message ScanRequest {
+  string hostname = 1;
+
+  /*
+    The ports should be defined as a list of string with the following pattern:
+
+    - "80" for a single port
+    - "80-90" for a range of ports
+    - "80,90" for a list of ports
+    - "80,90-100" for a list of ports and a range of ports
+
+    The list of ports and the range of ports can be combined. And it assumes all protocols available.
+    
+    For specific protocols, the following pattern can be used:
+    - "80/tcp" for a single port
+    - "80-90/tcp" for a range of ports
+    - "80/udp,90/tcp" for a list of ports
+    - "80/udp,81-90/tcp,100-110/udp" for a list of ports and a range of ports
+  */
+  repeated string ports = 2;
+  OnScanResultAction action = 3;
+}
+
+message ScanResult {
+  string hostname = 1;
+  string port = 2;
+  ScanStatus status = 3;
+}
+
+service ScanService {
+  rpc Scan(ScanRequest) returns (ScanResult);
+}
