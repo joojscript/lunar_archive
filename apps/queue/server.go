@@ -10,8 +10,8 @@ func main() {
 	wg := sync.WaitGroup{}
 	wg.Add(1)
 
-	cron := services.SetupCron()
 	queueConnection, queueChannel := services.SetupQueue()
+	cron := services.SetupCron(queueChannel)
 
 	defer cron.Stop() // Stop the scheduler (does not stop any jobs already running).
 	defer queueChannel.Close()

@@ -20,12 +20,12 @@ func SetupQueue() (*amqp.Connection, *amqp.Channel) {
 	failOnError(err, "Failed to open a channel")
 
 	setupQueues(channel)
-	scanRequests := setupScanRequestConsumer(channel)
+	scanResults := setupScanResultConsumer(channel)
 
 	go func() {
-		for d := range scanRequests {
+		for d := range scanResults {
 			log.Printf("Received a message: %s", d.Body)
-			produceScanResult(channel, d.Body)
+			produceSaveScanRequest(channel, d.Body)
 		}
 	}()
 
@@ -56,27 +56,41 @@ func setupQueues(channel *amqp.Channel) {
 	}
 }
 
-func setupScanRequestConsumer(channel *amqp.Channel) <-chan amqp.Delivery {
+func setupScanResultConsumer(channel *amqp.Channel) <-chan amqp.Delivery {
 	messages, err := channel.Consume(
-		"SCAN_REQUEST", // queue
-		"",             // consumer
-		true,           // auto-ack
-		false,          // exclusive
-		false,          // no-local
-		false,          // no-wait
-		nil,            // args
+		"SCAN_RESULT", // queue
+		"",            // consumer
+		true,          // auto-ack
+		false,         // exclusive
+		false,         // no-local
+		false,         // no-wait
+		nil,           // args
 	)
 	failOnError(err, "Failed to register a consumer")
 
 	return messages
 }
 
-func produceScanResult(channel *amqp.Channel, body []byte) {
+func ProduceScanRequest(channel *amqp.Channel, body []byte) {
 	err := channel.Publish(
-		"",            // exchange
-		"SCAN_RESULT", // routing key
-		false,         // mandatory
-		false,         // immediate
+		"",             // exchange
+		"SCAN_REQUEST", // routing key
+		false,          // mandatory
+		false,          // immediate
+		amqp.Publishing{
+			ContentType: "text/plain",
+			Body:        body,
+		})
+	failOnError(err, "Failed to publish a message")
+
+}
+
+func produceSaveScanRequest(channel *amqp.Channel, body []byte) {
+	err := channel.Publish(
+		"",          // exchange
+		"SAVE_SCAN", // routing key
+		false,       // mandatory
+		false,       // immediate
 		amqp.Publishing{
 			ContentType: "text/plain",
 			Body:        body,
