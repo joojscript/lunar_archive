@@ -1,4 +1,4 @@
 {
-  "elixir.projectPath": "apps/server",
-  "elixirLS.projectDir": "apps/server"
+  "elixirLS.projectDir": "apps/server",
+  "rust-analyzer.linkedProjects": ["apps/scanner"]
 }
