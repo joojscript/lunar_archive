@@ -1,0 +1,150 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "services/scan.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "ScanService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/scan": {
+      "post": {
+        "operationId": "ScanService_Scan",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/scanScanResult"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/scanScanRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ScanService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "protocolProtocol": {
+      "type": "string",
+      "enum": [
+        "UNKNOWN",
+        "TCP",
+        "UDP"
+      ],
+      "default": "UNKNOWN"
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "scanOnScanResultAction": {
+      "type": "string",
+      "enum": [
+        "SAVE",
+        "IGNORE"
+      ],
+      "default": "SAVE"
+    },
+    "scanScanRequest": {
+      "type": "object",
+      "properties": {
+        "hostname": {
+          "type": "string"
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "- \"80\" for a single port\n- \"80-90\" for a range of ports\n- \"80,90\" for a list of ports\n- \"80,90-100\" for a list of ports and a range of ports\n\nThe list of ports and the range of ports can be combined. And it assumes all protocols available.\n\nFor specific protocols, the following pattern can be used:\n- \"80/tcp\" for a single port\n- \"80-90/tcp\" for a range of ports\n- \"80/udp,90/tcp\" for a list of ports\n- \"80/udp,81-90/tcp,100-110/udp\" for a list of ports and a range of ports",
+          "title": "The ports should be defined as a list of string with the following pattern:"
+        },
+        "action": {
+          "$ref": "#/definitions/scanOnScanResultAction"
+        }
+      }
+    },
+    "scanScanResult": {
+      "type": "object",
+      "properties": {
+        "hostname": {
+          "type": "string"
+        },
+        "port": {
+          "type": "string"
+        },
+        "protocol": {
+          "$ref": "#/definitions/protocolProtocol"
+        },
+        "status": {
+          "$ref": "#/definitions/scanScanStatus"
+        },
+        "service": {
+          "type": "string"
+        },
+        "signal": {
+          "type": "string"
+        }
+      }
+    },
+    "scanScanStatus": {
+      "type": "string",
+      "enum": [
+        "UNKNOWN",
+        "OPEN",
+        "CLOSED"
+      ],
+      "default": "UNKNOWN"
+    }
+  }
+}

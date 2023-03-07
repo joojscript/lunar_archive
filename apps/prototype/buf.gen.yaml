@@ -1,0 +1,21 @@
+version: v1
+plugins:
+  - remote: buf.build/prost/plugins/prost:v0.2.1-1
+    out: ../scanner/src/generated
+    opt:
+      - compile_well_known_types
+      - extern_path=.google.protobuf=::pbjson_types
+  - remote: buf.build/prost/plugins/serde:v0.2.1-1
+    out: ../scanner/src/generated
+  - plugin: buf.build/protocolbuffers/go
+    out: ../queue/generated
+    opt:
+      - paths=source_relative
+  - plugin: buf.build/grpc/go:v1.2.0
+    out: ../queue/generated
+    opt:
+      - paths=source_relative
+  - plugin: buf.build/community/pseudomuto-doc
+    out: ../../packages/docs
+  - plugin: buf.build/grpc-ecosystem/openapiv2
+    out: ../../packages/docs

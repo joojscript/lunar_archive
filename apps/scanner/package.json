@@ -1,5 +1,6 @@
 {
   "scripts": {
-    "build:proto": ""
+    "build": "pnpx build:proto",
+    "build:proto": "mkdir -p ./generated && protoc --prost_out=./generated --tonic_out=./generated --proto_path=../prototype ../prototype/**/*.proto"
   }
 }

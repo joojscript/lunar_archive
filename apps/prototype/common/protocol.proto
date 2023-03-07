@@ -5,6 +5,7 @@ package common.protocol;
 option go_package = "lunar/prototype/common/protocol";
 
 enum Protocol {
-    TCP = 0;
-    UDP = 1;
+    UNKNOWN = 0;
+    TCP = 1;
+    UDP = 2;
 }

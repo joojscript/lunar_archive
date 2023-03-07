@@ -1,8 +1,12 @@
 syntax = "proto3";
 
-package services.scan;
+package scan;
 
 option go_package = "lunar/prototype/services";
+
+import "google/api/annotations.proto";
+
+import "common/protocol.proto";
 
 enum ScanStatus {
   UNKNOWN = 0;
@@ -41,9 +45,17 @@ message ScanRequest {
 message ScanResult {
   string hostname = 1;
   string port = 2;
-  ScanStatus status = 3;
+  common.protocol.Protocol protocol = 3; 
+  ScanStatus status = 4;
+  string service = 5;
+  string signal = 6;
 }
 
 service ScanService {
-  rpc Scan(ScanRequest) returns (ScanResult);
+  rpc Scan(ScanRequest) returns (ScanResult) {
+    option (google.api.http) = {
+      post: "/api/v1/scan"
+      body: "*"
+    };
+  };
 }

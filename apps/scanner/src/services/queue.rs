@@ -1,3 +1,4 @@
+use crate::services::scan::perform_scan;
 use std::collections::BTreeMap;
 
 use amiquip::{
@@ -43,7 +44,13 @@ pub fn start_queue_consumer(connection: Connection, channel: Channel) -> Result<
             ConsumerMessage::Delivery(delivery) => {
                 let body = String::from_utf8_lossy(&delivery.body);
                 println!("({:>3}) Received [{}]", i, body);
-                publish_scan_result(&channel, &save_scan_queue)?;
+                let ports = body.split(",").collect();
+                let scan_result = perform_scan(&ports).unwrap();
+                publish_scan_result(
+                    &channel,
+                    &save_scan_queue,
+                    serde_json::to_string(&scan_result).unwrap().as_bytes(),
+                )?;
                 consumer.ack(delivery)?;
             }
             other => {
@@ -58,7 +65,7 @@ pub fn start_queue_consumer(connection: Connection, channel: Channel) -> Result<
     Ok(())
 }
 
-fn publish_scan_result(channel: &Channel, save_scan_queue: &Queue) -> Result<()> {
+fn publish_scan_result(channel: &Channel, save_scan_queue: &Queue, payload: &[u8]) -> Result<()> {
     let exchange = channel.exchange_declare(
         ExchangeType::Direct,
         "SAVE_SCAN_EXCHANGE",
@@ -70,7 +77,7 @@ fn publish_scan_result(channel: &Channel, save_scan_queue: &Queue) -> Result<()>
 
     save_scan_queue.bind(&exchange, "SAVE_SCAN", BTreeMap::new())?;
 
-    exchange.publish(Publish::new("Hello, world!".as_bytes(), "SAVE_SCAN"))?;
+    exchange.publish(Publish::new(payload, "SAVE_SCAN"))?;
 
     Ok(())
 }
