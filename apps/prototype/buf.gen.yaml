@@ -8,11 +8,11 @@ plugins:
   - remote: buf.build/prost/plugins/serde:v0.2.1-1
     out: ../scanner/src/generated
   - plugin: buf.build/protocolbuffers/go
-    out: ../queue/generated
+    out: ../queue
     opt:
       - paths=source_relative
   - plugin: buf.build/grpc/go:v1.2.0
-    out: ../queue/generated
+    out: ../queue
     opt:
       - paths=source_relative
   - plugin: buf.build/community/pseudomuto-doc

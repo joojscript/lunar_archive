@@ -1,6 +1,6 @@
 use crate::{
-    common::scan::ScanStatus,
-    generated::{protocol::Protocol, scan::ScanResult},
+    common::services::ScanStatus,
+    generated::{common::Protocol, services::ScanResult},
 };
 use rayon::prelude::*;
 use regex::Regex;
@@ -28,7 +28,7 @@ pub fn perform_scan(ports: &Vec<&str>) -> Result<Vec<ScanResult>, Box<dyn std::e
         }
         Err(e) => {
             if let std::io::ErrorKind::NotFound = e.kind() {
-                println!("`rustc` was not found! Check your PATH!");
+                println!("`rustscan` was not found! Check your PATH!");
             } else {
                 println!("Some strange error occurred :(");
             }

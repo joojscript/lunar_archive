@@ -1,6 +1,6 @@
-mod common;
-mod generated;
-mod services;
+pub mod common;
+pub mod generated;
+pub mod services;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let (queue_connection, queue_channel) = services::queue::start_queue()?;

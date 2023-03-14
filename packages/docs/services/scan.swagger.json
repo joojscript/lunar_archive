@@ -23,7 +23,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/scanScanResult"
+              "$ref": "#/definitions/servicesScanResult"
             }
           },
           "default": {
@@ -39,7 +39,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/scanScanRequest"
+              "$ref": "#/definitions/servicesScanRequest"
             }
           }
         ],
@@ -50,6 +50,15 @@
     }
   },
   "definitions": {
+    "commonProtocol": {
+      "type": "string",
+      "enum": [
+        "UNKNOWN",
+        "TCP",
+        "UDP"
+      ],
+      "default": "UNKNOWN"
+    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -58,15 +67,6 @@
         }
       },
       "additionalProperties": {}
-    },
-    "protocolProtocol": {
-      "type": "string",
-      "enum": [
-        "UNKNOWN",
-        "TCP",
-        "UDP"
-      ],
-      "default": "UNKNOWN"
     },
     "rpcStatus": {
       "type": "object",
@@ -87,7 +87,7 @@
         }
       }
     },
-    "scanOnScanResultAction": {
+    "servicesOnScanResultAction": {
       "type": "string",
       "enum": [
         "SAVE",
@@ -95,7 +95,7 @@
       ],
       "default": "SAVE"
     },
-    "scanScanRequest": {
+    "servicesScanRequest": {
       "type": "object",
       "properties": {
         "hostname": {
@@ -110,11 +110,11 @@
           "title": "The ports should be defined as a list of string with the following pattern:"
         },
         "action": {
-          "$ref": "#/definitions/scanOnScanResultAction"
+          "$ref": "#/definitions/servicesOnScanResultAction"
         }
       }
     },
-    "scanScanResult": {
+    "servicesScanResult": {
       "type": "object",
       "properties": {
         "hostname": {
@@ -124,10 +124,10 @@
           "type": "string"
         },
         "protocol": {
-          "$ref": "#/definitions/protocolProtocol"
+          "$ref": "#/definitions/commonProtocol"
         },
         "status": {
-          "$ref": "#/definitions/scanScanStatus"
+          "$ref": "#/definitions/servicesScanStatus"
         },
         "service": {
           "type": "string"
@@ -137,7 +137,7 @@
         }
       }
     },
-    "scanScanStatus": {
+    "servicesScanStatus": {
       "type": "string",
       "enum": [
         "UNKNOWN",

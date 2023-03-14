@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package scan;
+package services;
 
-option go_package = "lunar/prototype/services";
+option go_package = "lunar/services";
 
 import "google/api/annotations.proto";
 
@@ -45,7 +45,7 @@ message ScanRequest {
 message ScanResult {
   string hostname = 1;
   string port = 2;
-  common.protocol.Protocol protocol = 3; 
+  common.Protocol protocol = 3; 
   ScanStatus status = 4;
   string service = 5;
   string signal = 6;

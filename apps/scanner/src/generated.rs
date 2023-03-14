@@ -1,5 +1,5 @@
-#[path = "generated/common.protocol.rs"]
-pub mod protocol;
+#[path = "generated/common.rs"]
+pub mod common;
 
-#[path = "generated/services.scan.rs"]
-pub mod scan;
+#[path = "generated/services.rs"]
+pub mod services;

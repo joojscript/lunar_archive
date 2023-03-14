@@ -180,7 +180,7 @@
               
               
                 <li>
-                  <a href="#common.protocol.Protocol"><span class="badge">E</span>Protocol</a>
+                  <a href="#common.Protocol"><span class="badge">E</span>Protocol</a>
                 </li>
               
               
@@ -194,26 +194,26 @@
             <ul>
               
                 <li>
-                  <a href="#scan.ScanRequest"><span class="badge">M</span>ScanRequest</a>
+                  <a href="#services.ScanRequest"><span class="badge">M</span>ScanRequest</a>
                 </li>
               
                 <li>
-                  <a href="#scan.ScanResult"><span class="badge">M</span>ScanResult</a>
+                  <a href="#services.ScanResult"><span class="badge">M</span>ScanResult</a>
                 </li>
               
               
                 <li>
-                  <a href="#scan.OnScanResultAction"><span class="badge">E</span>OnScanResultAction</a>
+                  <a href="#services.OnScanResultAction"><span class="badge">E</span>OnScanResultAction</a>
                 </li>
               
                 <li>
-                  <a href="#scan.ScanStatus"><span class="badge">E</span>ScanStatus</a>
+                  <a href="#services.ScanStatus"><span class="badge">E</span>ScanStatus</a>
                 </li>
               
               
               
                 <li>
-                  <a href="#scan.ScanService"><span class="badge">S</span>ScanService</a>
+                  <a href="#services.ScanService"><span class="badge">S</span>ScanService</a>
                 </li>
               
             </ul>
@@ -233,7 +233,7 @@
       
 
       
-        <h3 id="common.protocol.Protocol">Protocol</h3>
+        <h3 id="common.Protocol">Protocol</h3>
         <p></p>
         <table class="enum-table">
           <thead>
@@ -274,7 +274,7 @@
       <p></p>
 
       
-        <h3 id="scan.ScanRequest">ScanRequest</h3>
+        <h3 id="services.ScanRequest">ScanRequest</h3>
         <p></p>
 
         
@@ -313,7 +313,7 @@ For specific protocols, the following pattern can be used:
               
                 <tr>
                   <td>action</td>
-                  <td><a href="#scan.OnScanResultAction">OnScanResultAction</a></td>
+                  <td><a href="#services.OnScanResultAction">OnScanResultAction</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -325,7 +325,7 @@ For specific protocols, the following pattern can be used:
 
         
       
-        <h3 id="scan.ScanResult">ScanResult</h3>
+        <h3 id="services.ScanResult">ScanResult</h3>
         <p></p>
 
         
@@ -351,14 +351,14 @@ For specific protocols, the following pattern can be used:
               
                 <tr>
                   <td>protocol</td>
-                  <td><a href="#common.protocol.Protocol">common.protocol.Protocol</a></td>
+                  <td><a href="#common.Protocol">common.Protocol</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
               
                 <tr>
                   <td>status</td>
-                  <td><a href="#scan.ScanStatus">ScanStatus</a></td>
+                  <td><a href="#services.ScanStatus">ScanStatus</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -386,7 +386,7 @@ For specific protocols, the following pattern can be used:
       
 
       
-        <h3 id="scan.OnScanResultAction">OnScanResultAction</h3>
+        <h3 id="services.OnScanResultAction">OnScanResultAction</h3>
         <p></p>
         <table class="enum-table">
           <thead>
@@ -409,7 +409,7 @@ For specific protocols, the following pattern can be used:
           </tbody>
         </table>
       
-        <h3 id="scan.ScanStatus">ScanStatus</h3>
+        <h3 id="services.ScanStatus">ScanStatus</h3>
         <p></p>
         <table class="enum-table">
           <thead>
@@ -442,7 +442,7 @@ For specific protocols, the following pattern can be used:
       
 
       
-        <h3 id="scan.ScanService">ScanService</h3>
+        <h3 id="services.ScanService">ScanService</h3>
         <p></p>
         <table class="enum-table">
           <thead>
@@ -452,8 +452,8 @@ For specific protocols, the following pattern can be used:
             
               <tr>
                 <td>Scan</td>
-                <td><a href="#scan.ScanRequest">ScanRequest</a></td>
-                <td><a href="#scan.ScanResult">ScanResult</a></td>
+                <td><a href="#services.ScanRequest">ScanRequest</a></td>
+                <td><a href="#services.ScanResult">ScanResult</a></td>
                 <td><p></p></td>
               </tr>
             
