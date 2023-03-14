@@ -1,5 +1,5 @@
 use crate::{
-    common::services::ScanStatus,
+    common::services::{self, ScanStatus},
     generated::{common::Protocol, services::ScanResult},
 };
 use rayon::prelude::*;
@@ -9,14 +9,29 @@ use std::{
     process::{Command, Stdio},
 };
 
-pub fn perform_scan(ports: &Vec<&str>) -> Result<Vec<ScanResult>, Box<dyn std::error::Error>> {
+pub fn perform_scan(
+    scan_request: &services::ScanRequest,
+) -> Result<Vec<ScanResult>, Box<dyn std::error::Error>> {
+    let command_arguments = if scan_request.ports.is_empty() {
+        vec![
+            String::from("-a"),
+            scan_request.hostname.clone(),
+            String::from(""),
+            String::from(""),
+        ]
+    } else {
+        let parsed_ports_array = parse_ports(scan_request.ports.clone())?;
+        let parsed_ports = parsed_ports_array.join(",");
+        vec![
+            String::from("-a"),
+            scan_request.hostname.clone(),
+            String::from("-p"),
+            parsed_ports,
+        ]
+    };
+
     match Command::new("rustscan")
-        .args([
-            "-a",
-            "192.168.0.114",
-            "-p",
-            parse_ports(ports).unwrap().join(",").as_str(),
-        ])
+        .args(command_arguments)
         .stderr(Stdio::piped())
         .output()
     {
@@ -37,7 +52,7 @@ pub fn perform_scan(ports: &Vec<&str>) -> Result<Vec<ScanResult>, Box<dyn std::e
     }
 }
 
-fn parse_ports<'a>(ports: &'a Vec<&str>) -> Result<Vec<String>, Box<dyn std::error::Error>> {
+fn parse_ports(ports: Vec<String>) -> Result<Vec<String>, Box<dyn std::error::Error>> {
     let single_port_parse_regex: Regex = Regex::new(r"(\d+-\d+|\d+)/?(.+)?").unwrap();
     let mut parsed_ports = Vec::new();
     for port in ports {

@@ -11,7 +11,7 @@ func SetupCron(channel *amqp.Channel) *cron.Cron {
 	c.AddFunc("* * * * *", func() {
 		payload, err := json.Marshal(ScanRequest{
 			Hostname: "192.168.0.114",
-			Ports:    []string{"80", "90-199/udp"},
+			Ports:    []string{},
 			Action:   OnScanResultAction_SAVE,
 		})
 

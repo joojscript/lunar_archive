@@ -1,4 +1,7 @@
-use crate::services::scan::perform_scan;
+use crate::{
+    common::services::{self, OnScanResultAction},
+    services::scan::perform_scan,
+};
 use std::collections::BTreeMap;
 
 use amiquip::{
@@ -44,13 +47,18 @@ pub fn start_queue_consumer(connection: Connection, channel: Channel) -> Result<
             ConsumerMessage::Delivery(delivery) => {
                 let body = String::from_utf8_lossy(&delivery.body);
                 println!("({:>3}) Received [{}]", i, body);
-                let ports = body.split(",").collect();
-                let scan_result = perform_scan(&ports).unwrap();
-                publish_scan_result(
-                    &channel,
-                    &save_scan_queue,
-                    serde_json::to_string(&scan_result).unwrap().as_bytes(),
-                )?;
+                let scan_request: services::ScanRequest =
+                    serde_json::from_slice(body.as_bytes()).unwrap();
+                let scan_result = perform_scan(&scan_request).unwrap();
+
+                // Save code
+                if scan_request.action() == OnScanResultAction::Save {
+                    publish_scan_result(
+                        &channel,
+                        &save_scan_queue,
+                        serde_json::to_string(&scan_result).unwrap().as_bytes(),
+                    )?;
+                }
                 consumer.ack(delivery)?;
             }
             other => {
