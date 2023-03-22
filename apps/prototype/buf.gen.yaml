@@ -7,14 +7,12 @@ plugins:
       - extern_path=.google.protobuf=::pbjson_types
   - remote: buf.build/prost/plugins/serde:v0.2.1-1
     out: ../scanner/src/generated
-  - plugin: buf.build/protocolbuffers/go
-    out: ../queue
+  - plugin: elixir
+    out: ../queue/lib/generated
     opt:
-      - paths=source_relative
-  - plugin: buf.build/grpc/go:v1.2.0
-    out: ../queue
-    opt:
-      - paths=source_relative
+      - include_docs=true
+      - package_prefix=Lunar.Queue
+      - transform_module=Lunar.Queue.Helpers.Grpc.Parser
   - plugin: buf.build/community/pseudomuto-doc
     out: ../../packages/docs
   - plugin: buf.build/grpc-ecosystem/openapiv2

@@ -27,3 +27,6 @@ queue-*.tar
 
 # Environment variables:
 .env
+
+# Generated Protobuf files:
+generated

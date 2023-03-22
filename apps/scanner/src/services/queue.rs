@@ -76,16 +76,18 @@ pub fn start_queue_consumer(connection: Connection, channel: Channel) -> Result<
 fn publish_scan_result(channel: &Channel, save_scan_queue: &Queue, payload: &[u8]) -> Result<()> {
     let exchange = channel.exchange_declare(
         ExchangeType::Direct,
-        "SAVE_SCAN_EXCHANGE",
+        "SCAN_RESULT_EXCHANGE",
         ExchangeDeclareOptions {
             durable: true,
             ..Default::default()
         },
     )?;
 
-    save_scan_queue.bind(&exchange, "SAVE_SCAN", BTreeMap::new())?;
+    println!("{:?}", payload);
 
-    exchange.publish(Publish::new(payload, "SAVE_SCAN"))?;
+    save_scan_queue.bind(&exchange, "SCAN_RESULT", BTreeMap::new())?;
+
+    exchange.publish(Publish::new(payload, "SCAN_RESULT"))?;
 
     Ok(())
 }

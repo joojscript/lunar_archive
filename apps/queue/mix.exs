@@ -23,6 +23,12 @@ defmodule Lunar.Queue.MixProject do
   defp deps do
     [
       {:amqp, "~> 3.2"},
+      {:surreal_ex, "~> 0.2.0"},
+      {:protobuf, "~> 0.10.0"},
+      {:google_protos, "~> 0.1"},
+      {:sched_ex, "~> 1.0"},
+      {:poison, "~> 5.0"},
+      {:rabbit, "~> 0.19"},
       {:dotenv, "~> 3.0.0", only: [:dev, :test]}
     ]
   end
