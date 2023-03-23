@@ -127,3 +127,97 @@ fn parse_response(
 
     Ok(result)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_parse_ports() {
+        let ports = vec![
+            String::from("80"),
+            String::from("443"),
+            String::from("8080"),
+            String::from("1-1000"),
+            String::from("1000-1"),
+            String::from("1-1000/tcp"),
+            String::from("1-1000/udp"),
+            String::from("1-1000/"),
+            String::from("1-1000/ssh"),
+        ];
+
+        let parsed_ports = parse_ports(ports).unwrap();
+        assert_eq!(parsed_ports.len(), 5003);
+        assert_eq!(parsed_ports[0], "80");
+        assert!(parsed_ports.contains(&"443".to_string()));
+        assert!(parsed_ports.contains(&"8080".to_string()));
+        assert!(parsed_ports.contains(&"1".to_string()));
+        assert!(parsed_ports.contains(&"1000".to_string()));
+        assert!(parsed_ports.contains(&"500".to_string()));
+        assert!(parsed_ports.contains(&"670".to_string()));
+    }
+
+    #[test]
+    fn test_parse_response() {
+        let output = "
+        PORT      STATE SERVICE      REASON
+        21/tcp    open  ftp          syn-ack
+        23/tcp    open  telnet       syn-ack
+        53/tcp    open  domain       syn-ack
+        80/tcp    open  http         syn-ack
+        139/tcp   open  netbios-ssn  syn-ack
+        445/tcp   open  microsoft-ds syn-ack
+        1900/tcp  open  upnp         syn-ack
+        7547/tcp  open  cwmp         syn-ack
+        57771/tcp open  unknown      syn-ack";
+        let scan_request = services::ScanRequest {
+            hostname: String::from("192.168.0.114"),
+            ports: vec![],
+            action: 0,
+        };
+        let scan_results = parse_response(&output.into(), &scan_request).unwrap();
+
+        let tcp_value: i32 = Protocol::Tcp.into();
+        let open_value: i32 = ScanStatus::Open.into();
+
+        assert_eq!(scan_results.len(), 9);
+        assert_eq!(scan_results[0].port, "21");
+        assert_eq!(scan_results[1].status, open_value);
+        assert_eq!(scan_results[2].protocol, tcp_value);
+        assert_eq!(scan_results[3].service, "http");
+        assert_eq!(scan_results[4].signal, "syn-ack");
+    }
+
+    #[test]
+    fn test_parse_response_with_empty_lines() {
+        let output = "
+        PORT      STATE SERVICE      REASON
+        21/tcp    open  ftp          syn-ack
+        23/tcp    open  telnet       syn-ack
+        53/tcp    open  domain       syn-ack
+        80/tcp    open  http         syn-ack
+        139/tcp   open  netbios-ssn  syn-ack
+        445/tcp   open  microsoft-ds syn-ack
+        1900/tcp  open  upnp         syn-ack
+        7547/tcp  open  cwmp         syn-ack
+        57771/tcp open  unknown      syn-ack
+
+        ";
+        let scan_request = services::ScanRequest {
+            hostname: String::from("192.168.0.114"),
+            ports: vec![],
+            action: 0,
+        };
+        let scan_results = parse_response(&output.into(), &scan_request).unwrap();
+
+        let tcp_value: i32 = Protocol::Tcp.into();
+        let open_value: i32 = ScanStatus::Open.into();
+
+        assert_eq!(scan_results.len(), 9);
+        assert_eq!(scan_results[0].port, "21");
+        assert_eq!(scan_results[1].status, open_value);
+        assert_eq!(scan_results[2].protocol, tcp_value);
+        assert_eq!(scan_results[3].service, "http");
+        assert_eq!(scan_results[4].signal, "syn-ack");
+    }
+}

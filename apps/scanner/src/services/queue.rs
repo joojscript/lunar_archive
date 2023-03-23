@@ -2,11 +2,9 @@ use crate::{
     common::services::{self},
     services::scan::perform_scan,
 };
-use std::collections::BTreeMap;
-
 use amiquip::{
-    Channel, Connection, ConsumerMessage, ConsumerOptions, Exchange, ExchangeDeclareOptions,
-    ExchangeType, Publish, Queue, QueueDeclareOptions, Result,
+    Channel, Connection, ConsumerMessage, ConsumerOptions, Exchange, Publish, QueueDeclareOptions,
+    Result,
 };
 
 pub fn start_queue() -> Result<(Connection, Channel)> {
