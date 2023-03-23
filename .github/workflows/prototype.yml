@@ -1,0 +1,40 @@
+name: Protype CI (Protobuf)
+
+on:
+  push:
+    branches: ["main"]
+    paths: ["apps/prototype/**"]
+  pull_request:
+    branches: ["main"]
+    paths: ["apps/prototype/**"]
+  # Allows you to run this workflow manually from the Actions tab on GitHub.
+  workflow_dispatch:
+
+env:
+  ImageOS: "ubuntu20"
+  MIX_ENV: "test"
+  OTP_VERSION_SPEC: "25.2"
+  ELIXIR_VERSION_SPEC: "1.14.3"
+
+defaults:
+  run:
+    working-directory: apps/prototype
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          otp-version: ${{ env.OTP_VERSION_SPEC }}
+          elixir-version: ${{ env.ELIXIR_VERSION_SPEC }}
+          version-type: "strict"
+      - name: Install protoc-gen-elixir
+        run: mix escript.install hex protobuf --force
+      - name: Setup Buf.Build
+        uses: bufbuild/buf-setup-action@v1
+      - name: Build
+        run: buf generate
