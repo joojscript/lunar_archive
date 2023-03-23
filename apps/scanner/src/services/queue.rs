@@ -1,12 +1,12 @@
 use crate::{
-    common::services::{self, OnScanResultAction},
+    common::services::{self},
     services::scan::perform_scan,
 };
 use std::collections::BTreeMap;
 
 use amiquip::{
-    Channel, Connection, ConsumerMessage, ConsumerOptions, ExchangeDeclareOptions, ExchangeType,
-    Publish, Queue, QueueDeclareOptions, Result,
+    Channel, Connection, ConsumerMessage, ConsumerOptions, Exchange, ExchangeDeclareOptions,
+    ExchangeType, Publish, Queue, QueueDeclareOptions, Result,
 };
 
 pub fn start_queue() -> Result<(Connection, Channel)> {
@@ -28,14 +28,6 @@ pub fn start_queue_consumer(connection: Connection, channel: Channel) -> Result<
         },
     )?;
 
-    let save_scan_queue = channel.queue_declare(
-        "SAVE_SCAN",
-        QueueDeclareOptions {
-            durable: true,
-            ..Default::default()
-        },
-    )?;
-
     // Start a consumer.
     let consumer = scan_request_queue.consume(ConsumerOptions {
         ..Default::default()
@@ -51,14 +43,10 @@ pub fn start_queue_consumer(connection: Connection, channel: Channel) -> Result<
                     serde_json::from_slice(body.as_bytes()).unwrap();
                 let scan_result = perform_scan(&scan_request).unwrap();
 
-                // Save code
-                if scan_request.action() == OnScanResultAction::Save {
-                    publish_scan_result(
-                        &channel,
-                        &save_scan_queue,
-                        serde_json::to_string(&scan_result).unwrap().as_bytes(),
-                    )?;
-                }
+                publish_scan_result(
+                    &channel,
+                    serde_json::to_string(&scan_result).unwrap().as_bytes(),
+                )?;
                 consumer.ack(delivery)?;
             }
             other => {
@@ -73,19 +61,8 @@ pub fn start_queue_consumer(connection: Connection, channel: Channel) -> Result<
     Ok(())
 }
 
-fn publish_scan_result(channel: &Channel, save_scan_queue: &Queue, payload: &[u8]) -> Result<()> {
-    let exchange = channel.exchange_declare(
-        ExchangeType::Direct,
-        "SCAN_RESULT_EXCHANGE",
-        ExchangeDeclareOptions {
-            durable: true,
-            ..Default::default()
-        },
-    )?;
-
-    println!("{:?}", payload);
-
-    save_scan_queue.bind(&exchange, "SCAN_RESULT", BTreeMap::new())?;
+fn publish_scan_result(channel: &Channel, payload: &[u8]) -> Result<()> {
+    let exchange = Exchange::direct(channel);
 
     exchange.publish(Publish::new(payload, "SCAN_RESULT"))?;
 

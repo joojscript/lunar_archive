@@ -1,3 +1,3 @@
-defmodule Lunar.Queue.Repository do
+defmodule Lunar.Repository do
   use SurrealEx.Conn
 end

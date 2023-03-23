@@ -1,8 +1,10 @@
-defmodule Lunar.Queue.Broker do
+defmodule Lunar.Broker do
   use Rabbit.Broker
 
-  alias Lunar.Queue.Services
-  alias Lunar.Queue.Helpers
+  require Logger
+
+  alias Lunar.Services
+  alias Lunar.Helpers
 
   def start_link(opts \\ []) do
     Rabbit.Broker.start_link(__MODULE__, opts, name: __MODULE__)
@@ -21,31 +23,51 @@ defmodule Lunar.Queue.Broker do
   def init(:consumer, opts), do: {:ok, opts}
 
   @impl Rabbit.Broker
-  def handle_message(message) do
+  def handle_message(
+        message = %Rabbit.Message{meta: %{routing_key: routing_key}, payload: payload}
+      ) do
     # Handle message consumption per consumer
-    IO.inspect(message.payload)
-    {:ack, message}
+    case routing_key do
+      "SCAN_RESULT" ->
+        handle(:SCAN_RESULT, payload)
+        {:ack, message}
+
+      _ ->
+        Logger.error("Unknown routing key: #{routing_key}")
+        {:nack, message}
+    end
   end
 
   @impl Rabbit.Broker
   def handle_error(message) do
+    IO.inspect(message)
     # Handle message errors per consumer
     {:nack, message}
   end
 
   def send_scan_request(request_payload) do
-    decoded_body =
-      Helpers.Grpc.Parser.map_to_typed_struct(
-        request_payload,
-        Services.ScanRequest
-      )
-
-    IO.inspect(decoded_body)
-
     parsed_payload =
-      decoded_body
+      request_payload
       |> Poison.encode!()
 
-    Rabbit.Broker.publish(Lunar.Queue.Broker, "", "SCAN_REQUEST", parsed_payload)
+    Rabbit.Broker.publish(Lunar.Broker, "", "SCAN_REQUEST", parsed_payload)
+    Logger.info("Sent scan request: #{inspect(request_payload)}")
+  end
+
+  defp handle(:SCAN_RESULT, payload) do
+    case payload do
+      "" ->
+        Logger.error("Invalid payload: #{inspect(payload)}")
+
+      _ ->
+        decoded_body =
+          Poison.decode!(payload)
+
+        parsed_objects =
+          decoded_body
+          |> Enum.map(&Helpers.Grpc.Parser.map_to_typed_struct(&1, Services.ScanResult))
+
+        parsed_objects |> Enum.map(&Lunar.Repository.ScanResults.insert_one!(&1))
+    end
   end
 end

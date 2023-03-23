@@ -39,7 +39,7 @@ pub fn perform_scan(
             // println!("Was spawned :)");
             // println!("stdout: {}", String::from_utf8_lossy(&output.stdout));
             let output = String::from_utf8_lossy(&output.stdout);
-            parse_response(&output)
+            parse_response(&output, &scan_request)
         }
         Err(e) => {
             if let std::io::ErrorKind::NotFound = e.kind() {
@@ -85,7 +85,10 @@ fn parse_ports(ports: Vec<String>) -> Result<Vec<String>, Box<dyn std::error::Er
     Ok(parsed_ports)
 }
 
-fn parse_response(output: &Cow<str>) -> Result<Vec<ScanResult>, Box<dyn std::error::Error>> {
+fn parse_response(
+    output: &Cow<str>,
+    scan_request: &services::ScanRequest,
+) -> Result<Vec<ScanResult>, Box<dyn std::error::Error>> {
     let scan_parser_regex =
         Regex::new(r"(?im)(\d+)/([A-Za-z-]+)\s+([A-Za-z-]*)\s+([A-Za-z-]*)\s+([A-Za-z-]*)")
             .unwrap();
@@ -101,7 +104,7 @@ fn parse_response(output: &Cow<str>) -> Result<Vec<ScanResult>, Box<dyn std::err
             let signal = captures.get(5).unwrap().as_str();
 
             let scan_result = ScanResult {
-                hostname: "".to_string(),
+                hostname: scan_request.hostname.clone(),
                 port: port.to_string(),
                 status: match status {
                     "open" => ScanStatus::Open.into(),

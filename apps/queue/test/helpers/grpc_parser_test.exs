@@ -1,4 +1,4 @@
-defmodule Lunar.Queue.Helpers.Grpc.ParserTest do
+defmodule Lunar.Helpers.Grpc.ParserTest do
   use ExUnit.Case, async: true
-  doctest Lunar.Queue.Helpers.Grpc.Parser
+  doctest Lunar.Helpers.Grpc.Parser
 end

@@ -1,8 +1,4 @@
-defmodule Lunar.Queue.Application do
-  # See https://hexdocs.pm/elixir/Application.html
-  # for more information on OTP Applications
-  @moduledoc false
-
+defmodule Lunar.Application do
   use Application
 
   @impl true
@@ -13,16 +9,16 @@ defmodule Lunar.Queue.Application do
     end
 
     children = [
-      # Starts a worker by calling: Queue.Worker.start_link(arg)
-      # {Queue.Worker, arg}
-      # {Lunar.Queue.AMQPConnectionManager, [System.get_env("RABBIT_MQ_URI")]}
       %{
         id: "SCAN_REQUESTS_CRON",
-        start:
-          {SchedEx, :run_every,
-           [Lunar.Queue.Services.Queue, :send_scan_request_globally, [], "*/1 * * * *"]}
+        start: {
+          SchedEx,
+          :run_every,
+          # Every minute
+          [Lunar.Services.Queue, :send_scan_request_globally, [], "*/1 * * * *"]
+        }
       },
-      {Lunar.Queue.Broker,
+      {Lunar.Broker,
        [
          connection: [uri: System.get_env("RABBIT_MQ_URI")],
          topology: [
@@ -38,9 +34,7 @@ defmodule Lunar.Queue.Application do
        ]}
     ]
 
-    # See https://hexdocs.pm/elixir/Supervisor.html
-    # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: Lunar.Queue.Supervisor]
+    opts = [strategy: :one_for_one, name: Lunar.Supervisor]
     Supervisor.start_link(children, opts)
   end
 end

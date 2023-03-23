@@ -1,6 +1,6 @@
-defmodule Lunar.Queue.Repository.ScanResults do
+defmodule Lunar.Repository.ScanResults do
   use SurrealEx.HTTP.Table,
-    conn: Lunar.Queue.Repository,
+    conn: Lunar.Repository,
     table: "scan_results"
 
   @spec get_all!(String.t()) :: {:error, any} | {:found, any} | {:not_found, nil} | {:ok, any}

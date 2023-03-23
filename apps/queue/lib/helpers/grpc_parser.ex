@@ -1,4 +1,4 @@
-defmodule Lunar.Queue.Helpers.Grpc.Parser do
+defmodule Lunar.Helpers.Grpc.Parser do
   @behaviour Protobuf.TransformModule
 
   @spec redact_fields :: [:__struct__ | :__unknown_fields__]
@@ -70,7 +70,7 @@ defmodule Lunar.Queue.Helpers.Grpc.Parser do
       %{action: :SAVE, hostname: "192.168.0.114", ports: []}
   """
   @spec map_to_typed_struct(map, atom) :: struct
-  def map_to_typed_struct(map, base_struct) do
+  def map_to_typed_struct(map, base_struct) when is_map(map) do
     map_with_atom_keys =
       for {key, val} <- map, into: %{}, do: {String.to_atom(key), val}
 
@@ -82,4 +82,7 @@ defmodule Lunar.Queue.Helpers.Grpc.Parser do
 
     Map.drop(intermediate_struct, redact_fields())
   end
+
+  def map_to_typed_struct(map, base_struct) when is_list(map),
+    do: map |> List.flatten() |> Enum.map(&map_to_typed_struct(&1, base_struct))
 end

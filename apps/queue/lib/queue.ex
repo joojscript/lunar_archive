@@ -1,4 +1,4 @@
-defmodule Lunar.Queue do
+defmodule Lunar do
   @moduledoc """
   Documentation for `Queue`.
   """

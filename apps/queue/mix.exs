@@ -1,10 +1,10 @@
-defmodule Lunar.Queue.MixProject do
+defmodule Lunar.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :queue,
-      version: "0.1.0",
+      app: :lunar_core,
+      version: "0.0.1",
       elixir: "~> 1.15-dev",
       start_permanent: Mix.env() == :prod,
       deps: deps()
@@ -15,14 +15,13 @@ defmodule Lunar.Queue.MixProject do
   def application do
     [
       extra_applications: [:logger],
-      mod: {Lunar.Queue.Application, []}
+      mod: {Lunar.Application, []}
     ]
   end
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:amqp, "~> 3.2"},
       {:surreal_ex, "~> 0.2.0"},
       {:protobuf, "~> 0.10.0"},
       {:google_protos, "~> 0.1"},

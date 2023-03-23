@@ -1,2 +1,2 @@
-defmodule Lunar.QueueTest do
+defmodule LunarTest do
 end

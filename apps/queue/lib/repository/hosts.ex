@@ -1,13 +1,16 @@
-defmodule Lunar.Queue.Repository.Hosts do
+defmodule Lunar.Repository.Hosts do
   use SurrealEx.HTTP.Table,
-    conn: Lunar.Queue.Repository,
+    conn: Lunar.Repository,
     table: "hosts"
 
   @spec get_all :: {:error, any} | {:found, any} | {:not_found, nil} | {:ok, any}
   def get_all() do
-    case Lunar.Queue.Repository.sql("SELECT hostname FROM hosts") do
-      {:ok, response} -> {:ok, response.result}
-      {:error, error} -> {:error, error}
+    case Lunar.Repository.sql("SELECT hostname FROM hosts") do
+      {:ok, response} ->
+        {:ok, response.result}
+
+      {:error, error} ->
+        {:error, error}
     end
   end
 
