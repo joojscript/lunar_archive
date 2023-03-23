@@ -13,6 +13,10 @@ on:
 permissions:
   contents: read
 
+defaults:
+  run:
+    working-directory: apps/queue
+
 jobs:
   build:
     name: Build and test
