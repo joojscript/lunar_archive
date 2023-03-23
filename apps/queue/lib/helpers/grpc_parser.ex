@@ -10,8 +10,8 @@ defmodule Lunar.Helpers.Grpc.Parser do
     ## Examples
 
       iex> binary = "{\\"ports\\":[],\\"hostname\\":\\"192.168.0.114\\"}"
-      iex> Lunar.Queue.Helpers.Grpc.Parser.encode(binary, Lunar.Queue.Services.ScanRequest)
-      %Lunar.Queue.Services.ScanRequest{action: :SAVE, hostname: "", ports: []}
+      iex> Lunar.Helpers.Grpc.Parser.encode(binary, Lunar.Services.ScanRequest)
+      %Lunar.Services.ScanRequest{action: :SAVE, hostname: "", ports: []}
   """
   @impl true
   @spec encode(iodata, atom | struct) :: struct
@@ -27,8 +27,8 @@ defmodule Lunar.Helpers.Grpc.Parser do
 
     ## Examples
 
-      iex> struct = %Lunar.Queue.Services.ScanRequest{hostname: "192.168.0.114"}
-      iex> Lunar.Queue.Helpers.Grpc.Parser.decode(struct)
+      iex> struct = %Lunar.Services.ScanRequest{hostname: "192.168.0.114"}
+      iex> Lunar.Helpers.Grpc.Parser.decode(struct)
       "{\\"ports\\":[],\\"hostname\\":\\"192.168.0.114\\",\\"action\\":\\"SAVE\\",\\"__unknown_fields__\\":[]}"
   """
   @impl true
@@ -46,8 +46,8 @@ defmodule Lunar.Helpers.Grpc.Parser do
 
     ## Examples
 
-      iex> struct = %Lunar.Queue.Services.ScanRequest{hostname: "192.168.0.114"}
-      iex> Lunar.Queue.Helpers.Grpc.Parser.decode(struct)
+      iex> struct = %Lunar.Services.ScanRequest{hostname: "192.168.0.114"}
+      iex> Lunar.Helpers.Grpc.Parser.decode(struct)
       "{\\"ports\\":[],\\"hostname\\":\\"192.168.0.114\\",\\"action\\":\\"SAVE\\",\\"__unknown_fields__\\":[]}"
   """
   @spec decode(map) ::
@@ -66,7 +66,7 @@ defmodule Lunar.Helpers.Grpc.Parser do
     ## Examples
 
       iex> map = %{"hostname" => "192.168.0.114"}
-      iex> Lunar.Queue.Helpers.Grpc.Parser.map_to_typed_struct(map, %Lunar.Queue.Services.ScanRequest{})
+      iex> Lunar.Helpers.Grpc.Parser.map_to_typed_struct(map, %Lunar.Services.ScanRequest{})
       %{action: :SAVE, hostname: "192.168.0.114", ports: []}
   """
   @spec map_to_typed_struct(map, atom) :: struct
