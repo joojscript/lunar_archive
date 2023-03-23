@@ -7,7 +7,8 @@ defmodule Lunar.MixProject do
       version: "0.0.1",
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      aliases: aliases()
     ]
   end
 
@@ -30,5 +31,17 @@ defmodule Lunar.MixProject do
       {:rabbit, "~> 0.19"},
       {:dotenv, "~> 3.0.0", only: [:dev, :test]}
     ]
+  end
+
+  defp aliases do
+    [
+      "proto.compile": &compile_protos/1
+    ]
+  end
+
+  defp compile_protos(_args) do
+    System.shell(
+      "protoc --elixir_out=plugins=grpc:lib/generated --elixir_opt=package_prefix=Lunar --elixir_opt=transform_module=Lunar.Helpers.Grpc.Parser --elixir_opt=include_docs=true --proto_path=../prototype ../prototype/**/*.proto"
+    )
   end
 end
