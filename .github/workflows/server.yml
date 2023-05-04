@@ -1,4 +1,4 @@
-name: Server CI (Elixir)
+name: Server CI (NestJS)
 
 on:
   push:
@@ -10,33 +10,38 @@ on:
   # Allows you to run this workflow manually from the Actions tab on GitHub.
   workflow_dispatch:
 
-permissions:
-  contents: read
+env:
+  CARGO_TERM_COLOR: always
 
 defaults:
   run:
     working-directory: apps/server
 
-env:
-  ImageOS: "ubuntu20"
-  MIX_ENV: "test"
-  OTP_VERSION_SPEC: "25.2"
-  ELIXIR_VERSION_SPEC: "1.14.3"
-
 jobs:
   build:
-    name: Build and test
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: apps/web
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Elixir
-        uses: erlef/setup-beam@v1
+      - name: Checkout your repository using git
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
         with:
-          otp-version: ${{ env.OTP_VERSION_SPEC }}
-          elixir-version: ${{ env.ELIXIR_VERSION_SPEC }}
-          version-type: "strict"
+          node-version: 19.2.0
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
+        with:
+          version: 7.18.2
+
       - name: Install dependencies
-        run: mix deps.get
+        run: pnpm i
+
+      - name: Build project
+        run: pnpm build
+
       - name: Run tests
-        run: mix test
+        run: pnpm test
