@@ -1,4 +1,0 @@
-{
-  "elixirLS.projectDir": "apps/queue",
-  "rust-analyzer.linkedProjects": ["apps/scanner/Cargo.toml"]
-}

@@ -1,8 +1,0 @@
-{
-  "name": "@lunar/queue",
-  "scripts": {
-    "dev": "mix run --no-halt",
-    "build": "pnpx build:proto",
-    "build:proto": "mkdir -p ./generated && protoc --prost_out=./generated --tonic_out=./generated --proto_path=../prototype ../prototype/**/*.proto"
-  }
-}
