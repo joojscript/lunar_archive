@@ -4,7 +4,8 @@ defmodule Lunar.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      {Bandit, plug: Lunar.Router}
+      {Bandit, plug: Lunar.Router},
+      Lunar.Repo
     ]
 
     opts = [strategy: :one_for_one, name: Lunar.Supervisor]

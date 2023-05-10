@@ -24,12 +24,14 @@ defmodule Lunar.MixProject do
   defp deps do
     [
       {:bandit, "~> 1.0-pre"},
+      {:ecto_sql, "~> 3.0"},
+      {:postgrex, ">= 0.0.0"},
       {:lettuce, "~> 0.2.0", only: :dev},
       {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false}
     ]
   end
 
-  defp extra_applicationd(:dev), do: [:logger, :lettuce]
+  defp extra_applications(:dev), do: [:logger, :lettuce]
   defp extra_applications(:test), do: [:logger]
   defp extra_applications(_), do: [:logger]
 end

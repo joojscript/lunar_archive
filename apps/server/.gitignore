@@ -24,3 +24,6 @@ lunar-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+# Environment variables:
+config/*.secret.exs
