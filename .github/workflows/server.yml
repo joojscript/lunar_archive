@@ -2,10 +2,10 @@ name: Server CI (NestJS)
 
 on:
   push:
-    branches: ["main"]
+    branches: ["*"]
     paths: ["apps/server/**"]
   pull_request:
-    branches: ["main"]
+    branches: ["*"]
     paths: ["apps/server/**"]
   # Allows you to run this workflow manually from the Actions tab on GitHub.
   workflow_dispatch:
