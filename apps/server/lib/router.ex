@@ -5,9 +5,7 @@ defmodule Lunar.Router do
   plug :match
   plug :dispatch
 
-  get "/" do
-    send_resp(conn, 200, "Hello, world!")
-  end
+  forward "/users", to: Lunar.Users.Router
 
   match _ do
     send_resp(conn, 404, "Not found")

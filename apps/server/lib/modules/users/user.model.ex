@@ -1,6 +1,5 @@
-defmodule Lunar.User do
+defmodule Lunar.Users.User do
   use Ecto.Schema
-
   import Ecto.Changeset
 
   @primary_key {:id, :binary_id, autogenerate: true}

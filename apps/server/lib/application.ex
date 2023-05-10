@@ -5,7 +5,8 @@ defmodule Lunar.Application do
   def start(_type, _args) do
     children = [
       {Bandit, plug: Lunar.Router},
-      Lunar.Repo
+      Lunar.Repo,
+      Lunar.Registry.SessionManager
     ]
 
     opts = [strategy: :one_for_one, name: Lunar.Supervisor]

@@ -11,6 +11,7 @@ defmodule Lunar.MixProject do
       preferred_cli_env: [
         "test.watch": :test
       ],
+      elixirc_paths: elixirc_paths(Mix.env())
     ]
   end
 
@@ -26,10 +27,15 @@ defmodule Lunar.MixProject do
       {:bandit, "~> 1.0-pre"},
       {:ecto_sql, "~> 3.0"},
       {:postgrex, ">= 0.0.0"},
+      {:poison, "~> 5.0"},
       {:lettuce, "~> 0.2.0", only: :dev},
+      {:ecto_sqlite3, "~> 0.10", only: :test},
       {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false}
     ]
   end
+
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
 
   defp extra_applications(:dev), do: [:logger, :lettuce]
   defp extra_applications(:test), do: [:logger]
