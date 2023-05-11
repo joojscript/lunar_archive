@@ -12,8 +12,8 @@ defmodule Lunar.Users.User do
 
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:first_name, :last_name, :email, :inserted_at, :updated_at])
-    |> validate_required([:first_name, :last_name, :email, :inserted_at, :updated_at])
+    |> cast(attrs, [:first_name, :last_name, :email])
+    |> validate_required([:first_name, :last_name, :email])
     |> validate_format(:email, ~r/@/)
     |> unique_constraint(:email)
   end
