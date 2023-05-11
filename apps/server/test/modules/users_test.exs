@@ -2,12 +2,15 @@ defmodule Lunar.UsersTest do
   use ExUnit.Case, async: true
   use Plug.Test
 
-  alias Lunar.Test.Repo
-
   @created_user %{}
 
   setup do
-    @created_user = Repo.insert!(%Lunar.Users.User{first_name: "John", last_name: "Doe", email: "johndoe@gmail.com"})
+    # Explicitly get a connection before each test
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Lunar.Repo)
+
+    @created_user = Lunar.Repo.insert!(%Lunar.Users.User{first_name: "John", last_name: "Doe", email: "johndoe@gmail.com"})
+
+    :ok
   end
 
   describe "GET /users" do

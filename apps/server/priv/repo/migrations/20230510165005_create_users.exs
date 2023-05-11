@@ -9,7 +9,7 @@ defmodule Lunar.Repo.Migrations.CreateUsers do
       add :email, :string, null: false
       add :is_email_verified, :boolean, null: false, default: false
 
-      timestamps(default: fragment("now()"))
+      timestamps(default: Lunar.Helpers.Repo.timestamps_default_fragment())
     end
 
     create index(:users, [:email], unique: true)

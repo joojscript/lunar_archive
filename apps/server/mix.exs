@@ -11,7 +11,8 @@ defmodule Lunar.MixProject do
       preferred_cli_env: [
         "test.watch": :test
       ],
-      elixirc_paths: elixirc_paths(Mix.env())
+      elixirc_paths: elixirc_paths(Mix.env()),
+      aliases: aliases()
     ]
   end
 
@@ -30,7 +31,15 @@ defmodule Lunar.MixProject do
       {:poison, "~> 5.0"},
       {:lettuce, "~> 0.2.0", only: :dev},
       {:ecto_sqlite3, "~> 0.10", only: :test},
+      {:mox, "~> 1.0", only: :test},
       {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false}
+    ]
+  end
+
+  defp aliases do
+    [
+      test: ["ecto.create --quiet", "ecto.migrate", "test"],
+      "test.watch": ["ecto.create --quiet", "ecto.migrate", "test.watch"]
     ]
   end
 
