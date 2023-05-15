@@ -19,17 +19,18 @@ defmodule Lunar.Registry.SessionManager do
     GenServer.call(__MODULE__, {:create_session, user})
   end
 
-  def retrieve_session_from_user_id(user_id) do
-    GenServer.call(__MODULE__, {:retrieve_session_from_user_id, user_id})
+  def retrieve_session_from_user_id(session_id) do
+    GenServer.call(__MODULE__, {:retrieve_session_from_user_id, session_id})
   end
 
   def handle_call({:create_session, user}, _from, _state) do
-    :ets.insert(@global_session_bucket_key, {user.id, user})
-    {:reply, :ok, user}
+    session_id = Ecto.UUID.generate()
+    :ets.insert(@global_session_bucket_key, {session_id, user})
+    {:reply, :ok, session_id}
   end
 
-  def handle_call({:retrieve_session_from_user_id, user_id}, _from, state) do
-    user_from_session = :ets.lookup(@global_session_bucket_key, user_id)
+  def handle_call({:retrieve_session_from_user_id, session_id}, _from, state) do
+    user_from_session = :ets.lookup(@global_session_bucket_key, session_id)
     {:reply, user_from_session, state}
   end
 end

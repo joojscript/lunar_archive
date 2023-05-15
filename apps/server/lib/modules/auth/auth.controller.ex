@@ -1,6 +1,8 @@
 defmodule Lunar.Auth.Controller do
   import Plug.Conn
 
+  alias Lunar.Registry
+
   def login_attempt(conn, params) do
     case Lunar.Auth.Service.send_login_otp_code(params) do
       {:ok, user} ->
@@ -18,7 +20,12 @@ defmodule Lunar.Auth.Controller do
   def verify_otp_code(conn, params) do
     case Lunar.Auth.Service.verify_otp_code(params) do
       {:ok, user} ->
-        send_resp(conn, 200, %{verified: true, user: user} |> Poison.encode!())
+        with {:ok, session_id} <- create_session_for_user(user) do
+          send_resp(conn, 200, %{verified: true, user: user} |> Poison.encode!())
+        else
+          {:error, reason} ->
+            send_resp(conn, 400, %{verified: false, reason: reason} |> Poison.encode!())
+        end
 
       {:error, reason} ->
         case reason do
@@ -33,5 +40,9 @@ defmodule Lunar.Auth.Controller do
             )
         end
     end
+  end
+
+  def create_session_for_user(user) do
+    Registry.SessionManager.create_session(user)
   end
 end
