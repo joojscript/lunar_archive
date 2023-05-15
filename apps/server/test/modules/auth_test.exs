@@ -11,7 +11,7 @@ defmodule Lunar.AuthTest do
       Lunar.Repo.insert!(%Lunar.Users.User{
         first_name: "John",
         last_name: "Doe",
-        email: "joaoaugustoperin@gmail.com"
+        email: "johndoe@gmail.com"
       })
 
     session_manager_pid = SessionManager.start_link()
@@ -24,8 +24,8 @@ defmodule Lunar.AuthTest do
   end
 
   describe "/auth" do
-    test "POST /auth/login_attempt" do
-      conn = conn(:post, "/auth/login_attempt", %{email: "joaoaugustoperin@gmail.com"})
+    test "POST /auth/login_attempt", context do
+      conn = conn(:post, "/auth/login_attempt", %{email: "johndoe@gmail.com"})
 
       response = Lunar.Router.call(conn, %{})
 
@@ -35,13 +35,13 @@ defmodule Lunar.AuthTest do
     test "POST /auth/verify_otp_code" do
       conn =
         conn(:post, "/auth/verify_otp_code", %{
-          email: "joaoaugustoperin@gmail.com",
+          email: "johndoe@gmail.com",
           otp_code: "123456"
         })
 
       response = Lunar.Router.call(conn, %{})
 
-      assert response.status == 400 || response.status == 200
+      assert response.status == 400
     end
   end
 end
