@@ -1,11 +1,13 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-
+import { useStore } from "@nanostores/react";
+import { AuthStore } from "@stores/auth.store";
 import { GithubIcon } from "@assets/icons/GithubIcon";
 import { LunarLogo } from "@assets/logos/LunarLogo";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { session_id } = useStore(AuthStore);
 
   return (
     <nav className="w-full h-20 flex flex-col justify-center items-center fixed bg-customDarkBg1 lg:bg-customDarkBgTransparent z-40 lg:backdrop-blur-xl">
@@ -61,10 +63,10 @@ export const Navbar = () => {
             <a
               className="text-white custom-border-gray rounded-xl
            bg-customDarkBg2 hover:bg-customDarkBg3  border-gray-700 pl-6 pr-6 pt-2 pb-2 text-sm flex"
-              href="/sign"
-              aria-label="Get onboard"
+              href={session_id ? "/dashboard" : "/sign"}
+              aria-label={session_id ? "Get Inside" : "Get Onboard"}
             >
-              Get Onboard
+              {session_id ? "Get Inside" : "Get Onboard"}
             </a>
           </div>
         </motion.div>

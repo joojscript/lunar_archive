@@ -13,7 +13,7 @@ export const makeRequest = async (path: string, options: RequestInit) => {
     // Remove authentication, redirect, and re-throw the error:
     AuthStore.set({
       ...AuthStore.get(),
-      accessToken: undefined,
+      session_id: undefined,
     });
     window.location.href = "/sign";
   }
