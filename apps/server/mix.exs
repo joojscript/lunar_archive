@@ -29,6 +29,7 @@ defmodule Lunar.MixProject do
       {:ecto_sql, "~> 3.0"},
       {:postgrex, ">= 0.0.0"},
       {:poison, "~> 5.0"},
+      {:httpoison, "~> 2.0"},
       {:lettuce, "~> 0.2.0", only: :dev},
       {:ecto_sqlite3, "~> 0.10", only: :test},
       {:mox, "~> 1.0", only: :test},
@@ -46,7 +47,8 @@ defmodule Lunar.MixProject do
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
 
-  defp extra_applications(:dev), do: [:logger, :lettuce]
-  defp extra_applications(:test), do: [:logger]
-  defp extra_applications(_), do: [:logger]
+  defp extra_applications(:standard), do: [:logger, :httpoison]
+  defp extra_applications(:dev), do: extra_applications(:standard) ++ [:lettuce]
+  defp extra_applications(:test), do: extra_applications(:standard)
+  defp extra_applications(_), do: extra_applications(:standard)
 end
