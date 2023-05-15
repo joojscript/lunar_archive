@@ -21,7 +21,11 @@ defmodule Lunar.Auth.Controller do
     case Lunar.Auth.Service.verify_otp_code(params) do
       {:ok, user} ->
         with {:ok, session_id} <- create_session_for_user(user) do
-          send_resp(conn, 200, %{verified: true, user: user} |> Poison.encode!())
+          send_resp(
+            conn,
+            200,
+            %{verified: true, user: user, session_id: session_id} |> Poison.encode!()
+          )
         else
           {:error, reason} ->
             send_resp(conn, 400, %{verified: false, reason: reason} |> Poison.encode!())

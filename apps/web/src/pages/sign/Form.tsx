@@ -143,7 +143,7 @@ const SignForm: React.FC = () => {
 
                 <div className="flex flex-col space-y-5">
                   <div>
-                    <button className="flex flex-row items-center justify-center text-center w-full border rounded-xl outline-none py-5 bg-gradient-to-r from-violet-500 to-fuchsia-500 border-none text-white text-sm shadow-sm">
+                    <button className="flex flex-row items-center justify-center text-center w-full border rounded-xl outline-none py-5 bg-gradient-to-r from-violet-500 to-fuchsia-500 border-none text-white text-sm shadow-sm" onClick={onSubmit}>
                       Verify Account
                     </button>
                   </div>

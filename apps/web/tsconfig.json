@@ -1,16 +1,33 @@
 {
   "extends": "./node_modules/astro/tsconfigs/strict",
   "compilerOptions": {
+    "jsx": "react",
     "baseUrl": ".",
     "paths": {
-      "@components/*": ["src/components/*"],
-      "@layouts/*": ["src/layouts/*"],
-      "@pages/*": ["src/pages/*"],
-      "@public/*": ["src/public/*"],
-      "@styles/*": ["src/styles/*"],
-      "@assets/*": ["src/assets/*"],
-      "@stores/*": ["src/stores/*"],
-      "@stores": ["src/stores"]
+      "@components/*": [
+        "src/components/*"
+      ],
+      "@layouts/*": [
+        "src/layouts/*"
+      ],
+      "@pages/*": [
+        "src/pages/*"
+      ],
+      "@public/*": [
+        "src/public/*"
+      ],
+      "@styles/*": [
+        "src/styles/*"
+      ],
+      "@assets/*": [
+        "src/assets/*"
+      ],
+      "@stores/*": [
+        "src/stores/*"
+      ],
+      "@stores": [
+        "src/stores"
+      ]
     }
   }
 }
