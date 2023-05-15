@@ -6,7 +6,7 @@ defmodule Lunar.Services.Mailer do
   use GenServer
 
   @endpoint_url "https://api.emailjs.com/api/v1.0/email/send"
-  @mailer_credentials Application.get_env(:lunar, __MODULE__)
+  @mailer_credentials Application.get_env(:lunar, __MODULE__, [])
   @mailer_user_id Keyword.get(@mailer_credentials, :user_id)
   @mailer_service_id Keyword.get(@mailer_credentials, :service_id)
   @mailer_template_id Keyword.get(@mailer_credentials, :template_id)
