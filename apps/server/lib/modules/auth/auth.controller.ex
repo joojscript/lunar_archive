@@ -6,7 +6,7 @@ defmodule Lunar.Auth.Controller do
   def login_attempt(conn, params) do
     case Lunar.Auth.Service.send_login_otp_code(params) do
       {:ok, user} ->
-        send_resp(conn, 200, user |> Poison.encode!())
+        send_resp(conn, 201, user |> Poison.encode!())
 
       {:error, changeset} ->
         send_resp(

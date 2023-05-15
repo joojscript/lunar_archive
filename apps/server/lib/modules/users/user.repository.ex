@@ -31,7 +31,7 @@ defmodule Lunar.Users.Repository do
 
   def create_one(attrs) do
     case Lunar.Users.User.changeset(%Lunar.Users.User{}, attrs) |> Lunar.Repo.insert() do
-      {:ok, user} -> {:ok, user |> Map.drop(@hidden_fields)}
+      {:ok, user} -> {:ok, user |> Map.drop(@hidden_fields_without_id)}
       {:error, changeset} -> {:error, changeset}
     end
   end

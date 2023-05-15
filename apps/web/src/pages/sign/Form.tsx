@@ -40,7 +40,7 @@ const SignForm: React.FC = () => {
       setIsLoading(true);
       switch (page) {
         case "FORM":
-          result = await makeRequest("/auth/login", {
+          result = await makeRequest("/auth/login_attempt", {
             body: JSON.stringify({
               email: data.email,
             }),
@@ -57,15 +57,15 @@ const SignForm: React.FC = () => {
 
           break;
         case "OTP":
-          result = await makeRequest("/auth/login/authorize", {
+          result = await makeRequest("/auth/verify_otp_code", {
             body: JSON.stringify({
               email: data.email,
-              code: data.code,
+              otp_code: data.code,
             }),
             method: "POST",
           });
 
-          if (result.status == 201) {
+          if (result.status == 200) {
             const data = await result.json();
             AuthStore.set({ ...AuthStore.get(), ...data });
             toast.success("You are now logged in");
@@ -202,10 +202,9 @@ const SignForm: React.FC = () => {
                       )}
                       <input
                         type="email"
-                        className={`form-control text-white block w-full px-3 py-1.5 text-base font-normal bg-transparent bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:bg-transparent focus:border-blue-600 focus:outline-none ${
-                          errors["email"] &&
+                        className={`form-control text-white block w-full px-3 py-1.5 text-base font-normal bg-transparent bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:bg-transparent focus:border-blue-600 focus:outline-none ${errors["email"] &&
                           "border-red-600 focus:border-red-600"
-                        }`}
+                          }`}
                         placeholder="Your Email"
                         {...register("email", {
                           required: "Email is required",

@@ -30,6 +30,7 @@ defmodule Lunar.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:poison, "~> 5.0"},
       {:httpoison, "~> 2.0"},
+      {:cors_plug, "~> 3.0"},
       {:lettuce, "~> 0.2.0", only: :dev},
       {:ecto_sqlite3, "~> 0.10", only: :test},
       {:mox, "~> 1.0", only: :test},
