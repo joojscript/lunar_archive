@@ -7,7 +7,8 @@ defmodule Lunar.Users.User do
     field(:first_name, :string)
     field(:last_name, :string)
     field(:email, :string)
-    field(:email_verified?, :boolean, default: false, source: :is_email_verified)
+
+    has_many(:hosts, Lunar.Hosts.Host, foreign_key: :owner_id)
   end
 
   def changeset(user, attrs) do
