@@ -13,9 +13,12 @@ defmodule Lunar.Plugs.Authentication do
     case SessionManager.retrieve_session_from_session_id(token) do
       [{_, user}] ->
         assign(conn, :current_user, user)
+        conn
 
       _ ->
-        send_resp(conn, 401, "Unauthorized")
+        # send_resp(conn, 401, "Unauthorized")
+        put_status(conn, 401)
+        conn
     end
   end
 

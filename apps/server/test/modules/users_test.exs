@@ -8,7 +8,12 @@ defmodule Lunar.UsersTest do
     # Explicitly get a connection before each test
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Lunar.Repo)
 
-    created_user = Lunar.Repo.insert!(%Lunar.Users.User{first_name: "John", last_name: "Doe", email: "johndoe@gmail.com"})
+    created_user =
+      Lunar.Repo.insert!(%Lunar.Users.User{
+        first_name: "John",
+        last_name: "Doe",
+        email: "johndoe@gmail.com"
+      })
 
     {:ok, %{created_user: created_user}}
   end
@@ -33,29 +38,32 @@ defmodule Lunar.UsersTest do
       response_body = response_body |> Poison.decode!()
 
       assert response_status == 200
+
       assert response_body == %{
-        "first_name" => "John",
-        "last_name" => "Doe",
-        "email" => "johndoe@gmail.com",
-      }
+               "first_name" => "John",
+               "last_name" => "Doe",
+               "email" => "johndoe@gmail.com"
+             }
     end
 
     test "POST /users - creates a user" do
-      conn = conn(:post, "/users", %{first_name: "Jane", last_name: "Doe", email: "janedoe@gmail.com"})
+      conn =
+        conn(:post, "/users", %{first_name: "Jane", last_name: "Doe", email: "janedoe@gmail.com"})
 
       %{
         status: response_status,
         resp_body: response_body
       } = Lunar.Router.call(conn, %{})
 
-      response_body = response_body |> Poison.decode!()
+      response_body = response_body |> Poison.decode!() |> Map.delete("id")
 
       assert response_status == 200
+
       assert response_body == %{
-        "first_name" => "Jane",
-        "last_name" => "Doe",
-        "email" => "janedoe@gmail.com"
-      }
+               "first_name" => "Jane",
+               "last_name" => "Doe",
+               "email" => "janedoe@gmail.com"
+             }
     end
 
     test "POST /users - returns an error if the user is invalid" do
@@ -69,13 +77,19 @@ defmodule Lunar.UsersTest do
       response_body = response_body |> Poison.decode!()
 
       assert response_status == 400
+
       assert response_body == %{
-        "email" => "Can't be blank"
-      }
+               "email" => "Can't be blank"
+             }
     end
 
     test "PUT /users/:id - updates a user", %{created_user: created_user} do
-      conn = conn(:put, "/users/#{created_user.id}", %{first_name: "Jane", last_name: "Doe", email: "janedoe@gmail.com"})
+      conn =
+        conn(:put, "/users/#{created_user.id}", %{
+          first_name: "Jane",
+          last_name: "Doe",
+          email: "janedoe@gmail.com"
+        })
 
       %{
         status: response_status,
@@ -87,10 +101,10 @@ defmodule Lunar.UsersTest do
       assert response_status == 200
 
       assert response_body == %{
-        "first_name" => "Jane",
-        "last_name" => "Doe",
-        "email" => "janedoe@gmail.com"
-      }
+               "first_name" => "Jane",
+               "last_name" => "Doe",
+               "email" => "janedoe@gmail.com"
+             }
     end
 
     test "DELETE /users/:id - deletes a user", %{created_user: created_user} do
@@ -104,11 +118,12 @@ defmodule Lunar.UsersTest do
       response_body = response_body |> Poison.decode!()
 
       assert response_status == 200
+
       assert response_body == %{
-        "first_name" => "John",
-        "last_name" => "Doe",
-        "email" => "johndoe@gmail.com"
-      }
+               "first_name" => "John",
+               "last_name" => "Doe",
+               "email" => "johndoe@gmail.com"
+             }
     end
   end
 end

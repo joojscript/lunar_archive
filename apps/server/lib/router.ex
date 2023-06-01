@@ -11,7 +11,7 @@ defmodule Lunar.Router do
   )
 
   plug(:match)
-  plug(Lunar.Plugs.Authentication)
+  # plug(Lunar.Plugs.Authentication)
   plug(:dispatch)
 
   forward("/users", to: Lunar.Users.Router)

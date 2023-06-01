@@ -29,7 +29,7 @@ defmodule Lunar.AuthTest do
 
       response = Lunar.Router.call(conn, %{})
 
-      assert response.status == 200
+      assert response.status == 201
     end
 
     test "POST /auth/verify_otp_code" do
@@ -39,7 +39,7 @@ defmodule Lunar.AuthTest do
           otp_code: "123456"
         })
 
-      response = Lunar.Router.call(conn, %{})
+      response = Lunar.Router.call(conn, [])
 
       assert response.status == 400
     end

@@ -19,12 +19,14 @@ defmodule Lunar.Auth.Service do
 
   def verify_otp_code(attrs) do
     with {:ok, user} <- Lunar.Users.Repository.find_one_by(:email, attrs["email"]) do
-      [{_, otp_code}] = :ets.lookup(:otp_codes, user.id)
-
-      if otp_code == attrs["otp_code"] do
-        {:ok, user}
+      with [{_, otp_code}] <- :ets.lookup(:otp_codes, user.id) do
+        if otp_code == attrs["otp_code"] do
+          {:ok, user}
+        else
+          {:error, :invalid_otp_code}
+        end
       else
-        {:error, :invalid_otp_code}
+        _ -> {:error, :user_not_found}
       end
     else
       _ -> {:error, :user_not_found}

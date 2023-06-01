@@ -1,6 +1,6 @@
 defmodule Lunar.Users.Repository do
-  @hidden_fields [:__meta__, :id, :email_verified?]
-  @hidden_fields_without_id [:__meta__, :email_verified?]
+  @hidden_fields [:__meta__, :id, :email_verified?, :hosts]
+  @hidden_fields_without_id [:__meta__, :email_verified?, :hosts]
 
   def list_all do
     case Lunar.Repo.all(Lunar.Users.User) do
