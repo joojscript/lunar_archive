@@ -11,6 +11,7 @@ defmodule Lunar.Application do
       Lunar.Repo,
       Registry.SessionManager,
       Registry.OTPBucketManager,
+      Registry.TemporaryHostIdentifiersManager,
       Services.Mailer
     ]
 

@@ -4,6 +4,8 @@ defmodule Lunar.Hosts.Router do
   plug(:match)
   plug(:dispatch)
 
+  post("/", do: Lunar.Hosts.Controller.create_host(conn, conn.params))
+
   post("/verify_host/:host_temporary_identifier",
     do: Lunar.Hosts.Controller.verify_host_attempt(conn, conn.params)
   )

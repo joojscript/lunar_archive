@@ -18,6 +18,8 @@ defmodule Lunar.Router do
 
   forward("/auth", to: Lunar.Auth.Router)
 
+  forward("/hosts", to: Lunar.Hosts.Router)
+
   match _ do
     send_resp(conn, 404, "Not found")
   end

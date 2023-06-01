@@ -12,7 +12,7 @@ defmodule Lunar.Hosts.Host do
 
   def changeset(host, attrs) do
     host
-    |> cast(attrs, [:label, :hostname, :owner_id])
-    |> validate_required([:hostname, :owner_id])
+    |> cast(attrs, [:label, :hostname, :user_id])
+    |> validate_required([:hostname, :user_id])
   end
 end
