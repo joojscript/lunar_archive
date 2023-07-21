@@ -1,7 +1,11 @@
 ---
 import Layout from "@layouts/Layout.astro";
-import Sidebar from "./components/Sidebar";
 import Content from "./components/Content.astro";
+import Sidebar from "./components/Sidebar";
+
+import { AuthStore } from "../../stores/auth.store";
+
+console.log(AuthStore.get());
 ---
 
 <Layout title="Dashboard | Lunar">

@@ -143,7 +143,10 @@ const SignForm: React.FC = () => {
 
                 <div className="flex flex-col space-y-5">
                   <div>
-                    <button className="flex flex-row items-center justify-center text-center w-full border rounded-xl outline-none py-5 bg-gradient-to-r from-violet-500 to-fuchsia-500 border-none text-white text-sm shadow-sm" onClick={onSubmit}>
+                    <button
+                      className="flex flex-row items-center justify-center text-center w-full border rounded-xl outline-none py-5 bg-gradient-to-r from-violet-500 to-fuchsia-500 border-none text-white text-sm shadow-sm"
+                      onClick={onSubmit}
+                    >
                       Verify Account
                     </button>
                   </div>
@@ -202,9 +205,10 @@ const SignForm: React.FC = () => {
                       )}
                       <input
                         type="email"
-                        className={`form-control text-white block w-full px-3 py-1.5 text-base font-normal bg-transparent bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:bg-transparent focus:border-blue-600 focus:outline-none ${errors["email"] &&
+                        className={`form-control text-white block w-full px-3 py-1.5 text-base font-normal bg-transparent bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:bg-transparent focus:border-blue-600 focus:outline-none ${
+                          errors["email"] &&
                           "border-red-600 focus:border-red-600"
-                          }`}
+                        }`}
                         placeholder="Your Email"
                         {...register("email", {
                           required: "Email is required",
