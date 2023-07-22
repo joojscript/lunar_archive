@@ -1,5 +1,4 @@
 defmodule Lunar.Hosts.Controller do
-  import Plug.Conn
   alias Lunar.Hosts.Host
   alias Lunar.Hosts.Service
   alias Lunar.Helpers.Responses

@@ -6,14 +6,14 @@ defmodule Lunar.Hosts.Repository do
 
   def list_all do
     case Lunar.Repo.all(Host) do
+      {:error, reason} ->
+        {:error, reason}
+
       hosts ->
         {
           :ok,
           hosts |> Enum.map(&Map.drop(&1, @hidden_fields))
         }
-
-      {:error, reason} ->
-        {:error, reason}
     end
   end
 
@@ -46,14 +46,14 @@ defmodule Lunar.Hosts.Repository do
 
   def update_one(host_id, attrs) do
     case Lunar.Repo.get(Host, host_id) do
+      {:error, reason} ->
+        {:error, reason}
+
       host ->
         case Host.changeset(host, attrs) |> Lunar.Repo.update() do
           {:ok, host} -> {:ok, host |> Map.drop(@hidden_fields)}
           {:error, changeset} -> {:error, changeset}
         end
-
-      {:error, reason} ->
-        {:error, reason}
     end
   end
 

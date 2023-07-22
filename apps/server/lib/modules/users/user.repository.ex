@@ -4,14 +4,14 @@ defmodule Lunar.Users.Repository do
 
   def list_all do
     case Lunar.Repo.all(Lunar.Users.User) do
+      {:error, reason} ->
+        {:error, reason}
+
       users ->
         {
           :ok,
           users |> Enum.map(&Map.drop(&1, @hidden_fields))
         }
-
-      {:error, reason} ->
-        {:error, reason}
     end
   end
 
@@ -38,14 +38,14 @@ defmodule Lunar.Users.Repository do
 
   def update_one(user_id, attrs) do
     case Lunar.Repo.get(Lunar.Users.User, user_id) do
+      {:error, reason} ->
+        {:error, reason}
+
       user ->
         case Lunar.Users.User.changeset(user, attrs) |> Lunar.Repo.update() do
           {:ok, user} -> {:ok, user |> Map.drop(@hidden_fields)}
           {:error, changeset} -> {:error, changeset}
         end
-
-      {:error, reason} ->
-        {:error, reason}
     end
   end
 

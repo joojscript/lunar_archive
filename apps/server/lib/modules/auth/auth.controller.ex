@@ -1,6 +1,4 @@
 defmodule Lunar.Auth.Controller do
-  import Plug.Conn
-
   alias Lunar.Registry
   alias Lunar.Helpers.Responses
 
@@ -18,7 +16,7 @@ defmodule Lunar.Auth.Controller do
     case Lunar.Auth.Service.verify_otp_code(params) do
       {:ok, user} ->
         with {:ok, session_id} <- create_session_for_user(user) do
-          Responses.ok(conn, Poison.ecode!(%{verified: true, user: user, session_id: session_id}))
+          Responses.ok(conn, Poison.encode!(%{verified: true, user: user, session_id: session_id}))
         else
           {:error, reason} ->
             Responses.bad_request(conn, Poison.encode!(%{verified: false, reason: reason}))

@@ -1,6 +1,4 @@
 defmodule Lunar.Users.Controller do
-  import Plug.Conn
-
   alias Lunar.Helpers.Responses
 
   def index(conn, _params) do

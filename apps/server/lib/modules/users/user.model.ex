@@ -8,7 +8,7 @@ defmodule Lunar.Users.User do
     field(:last_name, :string)
     field(:email, :string)
 
-    has_many(:hosts, Lunar.Hosts.Host, foreign_key: :owner_id)
+    has_many(:hosts, Lunar.Hosts.Host, foreign_key: :user_id)
   end
 
   def changeset(user, attrs) do
