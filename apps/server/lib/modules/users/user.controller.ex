@@ -1,15 +1,17 @@
 defmodule Lunar.Users.Controller do
   import Plug.Conn
 
+  alias Lunar.Helpers.Responses
+
   def index(conn, _params) do
     case Lunar.Users.Repository.list_all() do
       {:ok, users} ->
-        send_resp(conn, 200, users |> Poison.encode!())
+        Responses.ok(conn, Poison.encode!(users))
 
       {:error, reason} ->
         case reason do
-          :user_not_found -> send_resp(conn, 404, "User not found")
-          _ -> send_resp(conn, 500, "Internal server error")
+          :user_not_found -> Responses.not_found(conn, "User not found")
+          _ -> Responses.internal_server_error(conn)
         end
     end
   end
@@ -17,12 +19,12 @@ defmodule Lunar.Users.Controller do
   def show(conn, user_id) do
     case Lunar.Users.Repository.find_one(user_id) do
       {:ok, user} ->
-        send_resp(conn, 200, user |> Poison.encode!())
+        Responses.ok(conn, Poison.encode!(user))
 
       {:error, reason} ->
         case reason do
-          :user_not_found -> send_resp(conn, 404, "User not found")
-          _ -> send_resp(conn, 500, "Internal server error")
+          :user_not_found -> Responses.not_found(conn, "User not found")
+          _ -> Responses.internal_server_error(conn)
         end
     end
   end
@@ -30,40 +32,32 @@ defmodule Lunar.Users.Controller do
   def create(conn, params) do
     case Lunar.Users.Repository.create_one(params) do
       {:ok, user} ->
-        send_resp(conn, 200, user |> Poison.encode!())
+        Responses.created(conn, Poison.encode!(user))
 
       {:error, changeset} ->
-        send_resp(
-          conn,
-          400,
-          changeset |> Lunar.Helpers.Errors.format_ecto_changeset_errors()
-        )
+        Responses.with_ecto_errors(conn, 400, changeset)
     end
   end
 
   def update(conn, user_id, params) do
     case Lunar.Users.Repository.update_one(user_id, params) do
       {:ok, user} ->
-        send_resp(conn, 200, user |> Poison.encode!())
+        Responses.ok(conn, Poison.encode!(user))
 
       {:error, changeset} ->
-        send_resp(
-          conn,
-          400,
-          changeset |> Lunar.Helpers.Errors.format_ecto_changeset_errors()
-        )
+        Responses.with_ecto_errors(conn, 400, changeset)
     end
   end
 
   def delete(conn, user_id) do
     case Lunar.Users.Repository.delete_one(user_id) do
       {:ok, user} ->
-        send_resp(conn, 200, user |> Poison.encode!())
+        Responses.ok(conn, Poison.encode!(user))
 
       {:error, reason} ->
         case reason do
-          :user_not_found -> send_resp(conn, 404, "User not found")
-          _ -> send_resp(conn, 500, "Internal server error")
+          :user_not_found -> Responses.not_found(conn, "User not found")
+          _ -> Responses.internal_server_error(conn)
         end
     end
   end

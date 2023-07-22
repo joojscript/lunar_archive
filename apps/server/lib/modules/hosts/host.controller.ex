@@ -23,15 +23,15 @@ defmodule Lunar.Hosts.Controller do
     host_temporary_identifier = params["host_temporary_identifier"]
 
     if is_nil(host_temporary_identifier) do
-      Responses.generic(conn, 400, Poison.encode!(%{error: "Bad request"}))
+      Responses.bad_request(conn)
     end
 
     case Service.verify_host_attempt(host_temporary_identifier) do
       {:ok, hostname} ->
-        Responses.generic(conn, 200, Poison.encode!(%{hostname: hostname}))
+        Responses.ok(conn, Poison.encode!(%{hostname: hostname}))
 
       {:error, :host_not_found} ->
-        Responses.generic(conn, 404, Poison.encode!(%{error: "Host not found"}))
+        Responses.not_found(conn, Poison.encode!(%{error: "Host not found"}))
     end
   end
 end
