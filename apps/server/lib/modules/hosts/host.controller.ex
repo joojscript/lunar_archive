@@ -2,7 +2,7 @@ defmodule Lunar.Hosts.Controller do
   import Plug.Conn
   alias Lunar.Hosts.Host
   alias Lunar.Hosts.Service
-  alias Lunar.Helpers.Errors
+  alias Lunar.Helpers.Responses
 
   @spec create_host(
           Plug.Conn.t(),
@@ -11,16 +11,10 @@ defmodule Lunar.Hosts.Controller do
   def create_host(conn, params) do
     case Service.create_host(params) do
       {:ok, host} ->
-        conn
-        |> put_resp_header("content-type", "application/json")
-        |> send_resp(201, Poison.encode!(host))
+        Responses.generic(conn, 201, Poison.encode!(host))
 
       {:error, changeset} ->
-        errors_map = Errors.format_ecto_changeset_errors(changeset)
-
-        conn
-        |> put_resp_header("content-type", "application/json")
-        |> send_resp(400, errors_map)
+        Responses.with_ecto_errors(conn, 400, changeset)
     end
   end
 
@@ -29,19 +23,15 @@ defmodule Lunar.Hosts.Controller do
     host_temporary_identifier = params["host_temporary_identifier"]
 
     if is_nil(host_temporary_identifier) do
-      send_resp(conn, 400, "Bad request")
+      Responses.generic(conn, 400, Poison.encode!(%{error: "Bad request"}))
     end
 
     case Service.verify_host_attempt(host_temporary_identifier) do
       {:ok, hostname} ->
-        conn
-        |> put_resp_header("content-type", "application/json")
-        |> send_resp(200, Poison.encode!(%{hostname: hostname}))
+        Responses.generic(conn, 200, Poison.encode!(%{hostname: hostname}))
 
       {:error, :host_not_found} ->
-        conn
-        |> put_resp_header("content-type", "application/json")
-        |> send_resp(404, Poison.encode!(%{error: "Host not found"}))
+        Responses.generic(conn, 404, Poison.encode!(%{error: "Host not found"}))
     end
   end
 end
