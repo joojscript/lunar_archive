@@ -7,16 +7,17 @@ defmodule Lunar.Helpers.Responses do
   def generic(conn, 201, body), do: generic(conn, 201, body)
   def generic(conn, 400, body), do: generic(conn, 400, body)
   def generic(conn, 404, body), do: generic(conn, 404, body)
-  def generic(conn, status, body) when is_binary(body), do: generic(conn, status, %{message: body})
+
+  def generic(conn, status, body) when is_binary(body),
+    do: generic(conn, status, %{message: body})
 
   @spec generic(Plug.Conn.t(), non_neg_integer(), any()) :: Plug.Conn.t()
   def generic(conn, status, body) when is_map(body) do
     conn
     |> put_resp_header("content-type", "application/json")
-    |> send_resp(status, body)
+    |> send_resp(status, Poison.encode!(body))
+    |> halt()
   end
-
-  def with_ecto_errors(conn, 400, body), do: with_ecto_errors(conn, 400, body)
 
   @spec with_ecto_errors(Plug.Conn.t(), non_neg_integer(), Ecto.Changeset.t()) :: Plug.Conn.t()
   def with_ecto_errors(conn, status, changeset) do
@@ -25,6 +26,7 @@ defmodule Lunar.Helpers.Responses do
     conn
     |> put_resp_header("content-type", "application/json")
     |> send_resp(status, error_map)
+    |> halt()
   end
 
   def bad_request(conn), do: generic(conn, 400, "Bad Request")

@@ -6,7 +6,7 @@ defmodule Lunar.Hosts.Router do
 
   post("/", do: Lunar.Hosts.Controller.create_host(conn, conn.params))
 
-  post("/verify_host/:host_temporary_identifier",
+  post("/verify-host/:host_temporary_identifier",
     do: Lunar.Hosts.Controller.verify_host_attempt(conn, conn.params)
   )
 end

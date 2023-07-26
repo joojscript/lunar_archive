@@ -15,6 +15,8 @@ defmodule Lunar.Application do
       Services.Mailer
     ]
 
+    :observer.start()
+
     opts = [strategy: :one_for_one, name: Lunar.Supervisor]
     Supervisor.start_link(children, opts)
   end

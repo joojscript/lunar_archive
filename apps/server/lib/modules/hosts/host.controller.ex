@@ -10,10 +10,12 @@ defmodule Lunar.Hosts.Controller do
   def create_host(conn, params) do
     case Service.create_host(params) do
       {:ok, host} ->
-        Responses.generic(conn, 201, Poison.encode!(host))
+        Responses.generic(conn, 201, Poison.encode!(host)) |> Plug.Conn.halt()
 
       {:error, changeset} ->
         Responses.with_ecto_errors(conn, 400, changeset)
+
+        conn |> Plug.Conn.halt()
     end
   end
 
