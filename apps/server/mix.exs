@@ -31,6 +31,7 @@ defmodule Lunar.MixProject do
       {:poison, "~> 5.0"},
       {:httpoison, "~> 2.0"},
       {:cors_plug, "~> 3.0"},
+      {:vex, "~> 0.9.0"},
       {:lettuce, "~> 0.2.0", only: :dev},
       {:ecto_sqlite3, "~> 0.10", only: :test},
       {:mox, "~> 1.0", only: :test},

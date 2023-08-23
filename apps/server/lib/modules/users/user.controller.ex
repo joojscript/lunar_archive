@@ -30,7 +30,7 @@ defmodule Lunar.Users.Controller do
   def create(conn, params) do
     case Lunar.Users.Repository.create_one(params) do
       {:ok, user} ->
-        Responses.created(conn, Poison.encode!(user))
+        Responses.created(conn, user)
 
       {:error, changeset} ->
         Responses.with_ecto_errors(conn, 400, changeset)

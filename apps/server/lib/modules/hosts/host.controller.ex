@@ -10,7 +10,7 @@ defmodule Lunar.Hosts.Controller do
   def create_host(conn, params) do
     case Service.create_host(params) do
       {:ok, host} ->
-        Responses.generic(conn, 201, Poison.encode!(host)) |> Plug.Conn.halt()
+        Responses.created(conn, host)
 
       {:error, changeset} ->
         Responses.with_ecto_errors(conn, 400, changeset)
@@ -29,10 +29,10 @@ defmodule Lunar.Hosts.Controller do
 
     case Service.verify_host_attempt(host_temporary_identifier) do
       {:ok, hostname} ->
-        Responses.ok(conn, Poison.encode!(%{hostname: hostname}))
+        Responses.ok(conn, %{hostname: hostname})
 
       {:error, :host_not_found} ->
-        Responses.not_found(conn, Poison.encode!(%{error: "Host not found"}))
+        Responses.not_found(conn, %{error: "Host not found"})
     end
   end
 end
