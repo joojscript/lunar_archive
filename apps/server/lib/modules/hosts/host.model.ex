@@ -15,4 +15,13 @@ defmodule Lunar.Hosts.Host do
     |> cast(attrs, [:label, :hostname, :user_id])
     |> validate_required([:hostname, :user_id])
   end
+
+  def valid?(host), do: Vex.valid?(host, validation_rules())
+
+  defp validation_rules,
+    do: [
+      label: &is_binary/1,
+      hostname: [presence: true, format: ~r/^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}$/],
+      user_id: [presence: true, uuid: true]
+    ]
 end

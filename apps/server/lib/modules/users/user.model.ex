@@ -18,4 +18,13 @@ defmodule Lunar.Users.User do
     |> validate_format(:email, ~r/@/)
     |> unique_constraint(:email)
   end
+
+  def valid?(user), do: Vex.valid?(user, validation_rules())
+
+  defp validation_rules,
+    do: [
+      first_name: &is_binary/1,
+      last_name: &is_binary/1,
+      email: [presence: true, format: ~r/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/]
+    ]
 end
