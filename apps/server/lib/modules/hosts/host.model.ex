@@ -6,13 +6,14 @@ defmodule Lunar.Hosts.Host do
   schema "hosts" do
     field(:label, :string)
     field(:hostname, :string)
+    field(:verified_at, :utc_datetime)
 
     belongs_to(:user, Lunar.Users.User, type: :binary_id)
   end
 
   def changeset(host, attrs) do
     host
-    |> cast(attrs, [:label, :hostname, :user_id])
+    |> cast(attrs, [:label, :hostname, :user_id, :verified_at])
     |> validate_required([:hostname, :user_id])
   end
 

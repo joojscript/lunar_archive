@@ -38,8 +38,13 @@ defmodule Lunar.Registry.TemporaryHostIdentifiersManager do
   end
 
   def handle_call({:retrieve_host_by_random_identifier, random_identifier}, _from, state) do
-    user_from_session = :ets.lookup(@global_session_bucket_key, random_identifier)
-    {:reply, user_from_session, state}
+    host_lookup_result =
+      case :ets.lookup(@global_session_bucket_key, random_identifier) do
+        [{^random_identifier, host}] -> {:ok, host}
+        [] -> {:error, :host_not_found}
+      end
+
+    {:reply, host_lookup_result, state}
   end
 
   def handle_call({:cleanup_host_by_random_identifier, random_identifier}, _from, state) do

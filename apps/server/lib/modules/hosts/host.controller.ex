@@ -20,8 +20,8 @@ defmodule Lunar.Hosts.Controller do
   end
 
   @spec verify_host_attempt(Plug.Conn.t(), host_temporary_identifier: String.t()) :: Plug.Conn.t()
-  def verify_host_attempt(conn, params) do
-    host_temporary_identifier = params["host_temporary_identifier"]
+  def verify_host_attempt(conn, _params) do
+    host_temporary_identifier = conn.body_params()["host_temporary_identifier"]
 
     if is_nil(host_temporary_identifier) do
       Responses.bad_request(conn)
