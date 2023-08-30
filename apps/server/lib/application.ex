@@ -12,7 +12,8 @@ defmodule Lunar.Application do
       Registry.SessionManager,
       Registry.OTPBucketManager,
       Registry.TemporaryHostIdentifiersManager,
-      Services.Mailer
+      Services.Mailer,
+      Services.Queue
     ]
 
     :observer.start()
