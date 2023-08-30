@@ -2,6 +2,8 @@ defmodule Lunar.Hosts.Host do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Lunar.Helpers.Errors
+
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "hosts" do
     field(:label, :string)
@@ -11,6 +13,8 @@ defmodule Lunar.Hosts.Host do
     belongs_to(:user, Lunar.Users.User, type: :binary_id)
   end
 
+  def changeset(attrs), do: changeset(%__MODULE__{}, attrs)
+
   def changeset(host, attrs) do
     host
     |> cast(attrs, [:label, :hostname, :user_id, :verified_at])
@@ -18,7 +22,17 @@ defmodule Lunar.Hosts.Host do
     |> validate_required([:hostname, :user_id])
   end
 
-  def valid?(host), do: Vex.valid?(host, validation_rules())
+  def valid?(host) do
+    cond do
+      Vex.valid?(host, validation_rules()) ->
+        {:ok, true}
+
+      true ->
+        validation_errors = Vex.errors(host, validation_rules())
+        changeset_errors = Errors.vex_errors_to_changeset_errors(validation_errors)
+        {:error, changeset(%{errors: changeset_errors})}
+    end
+  end
 
   defp validation_rules,
     do: [
