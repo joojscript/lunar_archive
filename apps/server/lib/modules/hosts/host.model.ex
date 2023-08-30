@@ -14,6 +14,7 @@ defmodule Lunar.Hosts.Host do
   def changeset(host, attrs) do
     host
     |> cast(attrs, [:label, :hostname, :user_id, :verified_at])
+    |> unique_constraint(:hostname)
     |> validate_required([:hostname, :user_id])
   end
 

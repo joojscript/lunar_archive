@@ -33,7 +33,9 @@ defmodule Lunar.Hosts.Repository do
 
   @spec create_one(Host.t()) :: {:error, any} | {:ok, Host.t()}
   def create_one(attrs) when not is_nil(attrs) do
-    case Host.changeset(%Host{}, attrs) |> Lunar.Repo.insert() do
+    changeset = Host.changeset(%Host{}, attrs)
+
+    case Lunar.Repo.insert(changeset) do
       {:ok, host} ->
         {:ok, host |> Map.drop(@hidden_fields_without_id)}
 
