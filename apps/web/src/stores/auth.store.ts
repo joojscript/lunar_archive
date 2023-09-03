@@ -2,7 +2,7 @@ import localforage from "localforage";
 import { map } from "nanostores";
 
 type AuthStoreType = {
-  accessToken?: string;
+  session_id?: string;
 };
 
 const initialState: AuthStoreType =
