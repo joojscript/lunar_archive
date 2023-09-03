@@ -28,6 +28,8 @@ defmodule Lunar.MixProject do
       {:bandit, "~> 1.0-pre"},
       {:ecto_sql, "~> 3.0"},
       {:postgrex, ">= 0.0.0"},
+      # Almost mandatory for postgres (poor compatibility with poison)
+      {:jason, ">= 0.0.0"},
       {:poison, "~> 5.0"},
       {:httpoison, "~> 2.0"},
       {:cors_plug, "~> 3.0"},
