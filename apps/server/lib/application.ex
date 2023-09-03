@@ -13,7 +13,8 @@ defmodule Lunar.Application do
       Registry.OTPBucketManager,
       Registry.TemporaryHostIdentifiersManager,
       Services.Mailer,
-      Services.Queue
+      Services.Queue,
+      {Oban, Application.fetch_env!(:lunar, Oban)}
     ]
 
     :observer.start()

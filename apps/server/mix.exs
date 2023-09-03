@@ -34,6 +34,7 @@ defmodule Lunar.MixProject do
       {:httpoison, "~> 2.0"},
       {:cors_plug, "~> 3.0"},
       {:vex, "~> 0.9.0"},
+      {:oban, "~> 2.15"},
       {:lettuce, "~> 0.2.0", only: :dev},
       {:ecto_sqlite3, "~> 0.10", only: :test},
       {:mox, "~> 1.0", only: :test},
